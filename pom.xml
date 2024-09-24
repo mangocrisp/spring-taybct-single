@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>io.github.mangocrisp</groupId>
+    <artifactId>spring-taybct-single</artifactId>
+    <version>2.7.0-alpha.1</version>
+    <name>Spring TayBct Single</name>
+    <description>Spring TayBct Single</description>
+    <packaging>pom</packaging>
+
+    <properties>
+        <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
+        <!--Registry2仓库的地址，ip:port-->
+        <docker.repository.url>127.0.0.1:5000</docker.repository.url>
+        <!--<docker.repository.url>registry.cn-beijing.aliyuncs.com</docker.repository.url>-->
+        <!--项目名-->
+        <docker.registry.name>spring-taybct-single</docker.registry.name>
+        <docker.registry.username>taybct</docker.registry.username>
+        <docker.registry.password>taybct</docker.registry.password>
+        <!-- Collection 增强Java集合框架 -->
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <!--jdk 版本-->
+        <java.version>8</java.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <!--maven 打包工具，可以把各个模块打的包移动到同一个 target 文件夹下面方便部署-->
+        <maven-antrun-plugin.version>3.1.0</maven-antrun-plugin.version>
+        <!--生成 archetype 模板插件-->
+        <maven-archetype-plugin.version>3.2.1</maven-archetype-plugin.version>
+        <!--maven 插件-->
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <!--maven 源码插件-->
+        <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--spring boot 版本依赖-->
+        <spring-boot-maven-plugin.version>2.7.18</spring-boot-maven-plugin.version>
+        <!--spring boot 版本依赖-->
+        <spring-boot.version>2.7.18</spring-boot.version>
+        <!--框架版本-->
+        <spring-taybct.version>2.7.0-alpha.1</spring-taybct.version>
+        <!--工具版本-->
+        <spring-taybct-tools.version>2.7.0-alpha.1</spring-taybct-tools.version>
+    </properties>
+
+    <!-- 依赖声明 -->
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>io.github.mangocrisp</groupId>
+                <artifactId>spring-taybct-tools-dependencies</artifactId>
+                <version>${spring-taybct-tools.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--依赖版本管理-->
+            <dependency>
+                <groupId>io.github.mangocrisp</groupId>
+                <artifactId>spring-taybct-dependencies</artifactId>
+                <version>${spring-taybct.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--运行模块-鉴权模块-->
+            <dependency>
+                <groupId>io.github.mangocrisp</groupId>
+                <artifactId>auth</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--运行模块-文件管理-->
+            <dependency>
+                <groupId>io.github.mangocrisp</groupId>
+                <artifactId>admin-file</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--运行模块-日志管理-->
+            <dependency>
+                <groupId>io.github.mangocrisp</groupId>
+                <artifactId>admin-log</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--运行模块-系统模块-->
+            <dependency>
+                <groupId>io.github.mangocrisp</groupId>
+                <artifactId>module-system</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--任务调度模块-->
+            <dependency>
+                <groupId>io.github.mangocrisp</groupId>
+                <artifactId>module-scheduling</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--流程引擎-->
+            <dependency>
+                <groupId>io.github.mangocrisp</groupId>
+                <artifactId>module-lf</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!--api 接口-系统-->
+            <dependency>
+                <groupId>io.github.mangocrisp</groupId>
+                <artifactId>api-system</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!--公共模块（偏业务）-->
+            <dependency>
+                <groupId>io.github.mangocrisp</groupId>
+                <artifactId>common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+
+        <!--配置文件处理器的依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- lombok getter setter slf4j -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!--java 工具类库-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+        <!--自动生成 spring.factories 配置-->
+        <dependency>
+            <groupId>net.dreamlu</groupId>
+            <artifactId>mica-auto</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+    <modules>
+        <module>run</module>
+        <module>api</module>
+        <module>modules</module>
+        <module>admin</module>
+        <module>auth</module>
+        <module>common</module>
+        <module>laboratory</module>
+    </modules>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
+        <!--设置子项目不需要指定maven插件版本-->
+        <pluginManagement>
+            <plugins>
+                <!--spring boot 打包插件-->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                </plugin>
+                <!--打包源码插件-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                </plugin>
+                <!--maven 打包工具-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${maven-antrun-plugin.version}</version>
+                </plugin>
+                <!--生成 maven 模板-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-archetype-plugin</artifactId>
+                    <version>${maven-archetype-plugin.version}</version>
+                </plugin>
+                <!--docker 打包-->
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>${dockerfile-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <!--spring boot 打包插件-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <finalName>${project.build.finalName}</finalName>
+                    <!-- spring-boot:run 中文乱码解决 -->
+                    <jvmArguments>-Dfile.encoding=UTF-8</jvmArguments>
+                    <!--打包本地 jar 包到-->
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- 指定maven编译的jdk版本,如果不指定,maven3默认用jdk 1.5 maven2默认用jdk1.3 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <!-- 一般而言，target与source是保持一致的，但是，有时候为了让程序能在其他版本的jdk中运行(对于低版本目标jdk
+                    ，源代码中不能使用低版本jdk中不支持的语法)，会存在target不同于source的情况 -->
+                    <!-- 源代码使用的JDK版本 -->
+                    <source>${java.version}</source>
+                    <!-- 需要生成的目标class文件的编译版本 -->
+                    <target>${java.version}</target>
+                    <!-- 字符集编码 -->
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <showWarnings>true</showWarnings>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <!--打包源码插件-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--生成 maven 模板-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-archetype-plugin</artifactId>
+            </plugin>
+            <!-- 构建和推动Docker镜像 -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <configuration>
+                    <!--如果需要自动打包 docker 镜像，就注释这个标签 skip-->
+                    <skip>true</skip>
+                    <contextDirectory>${maven.multiModuleProjectDirectory}</contextDirectory>
+                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                    <!--仓库地址/项目名/模块名-->
+                    <repository>${docker.repository.url}/${docker.registry.name}/${project.build.finalName}</repository>
+                    <!--用户名-->
+                    <username>${docker.registry.username}</username>
+                    <!--用户密码-->
+                    <password>${docker.registry.password}</password>
+                    <tag>${project.version}</tag>
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

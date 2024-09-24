@@ -1,0 +1,36 @@
+<build>
+    <!--设置子项目不需要指定maven插件版本-->
+    <pluginManagement>
+        <plugins>
+            <!--docker 打包-->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>${dockerfile-maven-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </pluginManagement>
+    <plugins>
+        <!-- 构建和推动Docker镜像 -->
+        <plugin>
+            <groupId>com.spotify</groupId>
+            <artifactId>dockerfile-maven-plugin</artifactId>
+            <configuration>
+                <!--如果需要自动打包 docker 镜像，就注释这个标签 skip-->
+                <skip>true</skip>
+                <contextDirectory>${maven.multiModuleProjectDirectory}</contextDirectory>
+                <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                <!--仓库地址/项目名/模块名-->
+                <repository>${docker.repository.url}/${docker.registry.name}/${project.build.finalName}</repository>
+                <!--用户名-->
+                <username>${docker.registry.username}</username>
+                <!--用户密码-->
+                <password>${docker.registry.password}</password>
+                <tag>${project.version}</tag>
+                <buildArgs>
+                    <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                </buildArgs>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>

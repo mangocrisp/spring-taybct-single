@@ -10,6 +10,8 @@ Spring TayBct Single 是一个 Spring 业务组件基础集成的基础业务，
 - 系统管理等一些基础通用业务模块的基础简易集成
 - 本项目是单体架构，后续可以使用 dubbo 变成微服务什么的
 
+![img](img.png)
+
 #### 安装教程
 
 1.  mvn clean
@@ -19,11 +21,34 @@ Spring TayBct Single 是一个 Spring 业务组件基础集成的基础业务，
 #### 使用说明
 
 1.  是运行的代码
+2. **启动 VM 参数**
+
+```bash
+-Dmaven.wagon.http.ssl.insecure=true
+-Dmaven.wagon.http.ssl.allowall=true
+--add-opens
+java.base/java.lang=ALL-UNNAMED
+--add-opens
+java.base/java.util=ALL-UNNAMED
+--add-opens
+java.base/java.nio=ALL-UNNAMED
+--add-opens
+java.base/sun.nio.ch=ALL-UNNAMED
+--add-opens
+java.base/java.lang.reflect=ALL-UNNAMED
+```
+
+3. 你可以在 modules 模块下看得到这些手动注册的
+
+```java
+@RestController
+public class SysUserController extends SysUserControllerRegister {
+}
+```
 
 #### 参与贡献
 
-1.  本项目是基于 [Spring Taybct](https://gitee.com/gusubailimo/spring-taybct) 开发的单体架构业务项目，参与贡献就去这里面
-
+1.  本项目是基于 [Spring Taybct](https://github.com/mangocrisp/spring-taybct) 开发的单体架构业务项目，参与贡献就去这里面
 
 #### 免责声明
 

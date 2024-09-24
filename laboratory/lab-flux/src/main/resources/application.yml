@@ -1,0 +1,10 @@
+server:
+  port: 7002
+logging:
+  level:
+    root: debug
+spring:
+  profiles:
+    active: dev
+  application:
+    name: lab-flux

@@ -1,0 +1,47 @@
+taybct:
+  scheduled:
+    pool-size: 20
+    await-termination-seconds: 60
+    thread-name-prefix: "Scheduler-"
+    wait-for-tasks-to-complete-on-shutdown: true
+    tasks:
+      clearDirtyData:
+        task-key: clearDirtyData
+        cron: 0 0/1 * * * ?
+        description: "清理权限脏数据"
+        auto-start: 1
+        sort: 0
+      clearExpires:
+        task-key: clearExpires
+        cron: 0 0/1 * * * ?
+        description: "清理登录超时用户"
+        auto-start: 1
+        sort: 1
+      iniPermissionConfig:
+        task-key: iniPermissionConfig
+        cron: 0 0/1 * * * ?
+        description: "初始化权限配置"
+        auto-start: 1
+        sort: 2
+      iniParams:
+        task-key: iniParams
+        cron: 0 0/1 * * * ?
+        description: "初始化参数配置"
+        auto-start: 1
+        sort: 0
+      clearAuthCache:
+        task-key: clearAuthCache
+        cron: 0 0/1 * * * ?
+        description: "清理登录超时用户"
+        auto-start: 1
+        sort: 1
+      cleanNotLinkedFile:
+        task-key: cleanNotLinkedFile
+        # 每天 0 点清理无效文件
+        cron: 0 0 0 * * ?
+        description: "清理无效的文件"
+        auto-start: 1
+        sort: 1
+        params:
+          # 每次查询清理的条数，分页大小
+          "limit": 999

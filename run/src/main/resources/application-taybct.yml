@@ -1,0 +1,167 @@
+taybct:
+  config-prefix: taybct
+  message:
+    # 文件夹
+    folder: temp/${spring.application.name}/log
+    # 最多存储多少天的数据，默认 15 天
+    max-history: 15
+    # 检查日志本地文件延迟
+    check-delay: 100000
+    # 缓存，即池子满了这个数量就会直接发送消息，而不用等待
+    buffer: 1000
+    # 队列的延迟
+    delay: 10000
+  serve:
+    taybct-admin-file:
+      context-path: "/admin-file/"
+    taybct-system:
+      context-path: "/system/"
+      service-id: taybct-system
+    taybct-auth:
+      context-path: "/auth/"
+      service-id: taybct-auth
+    taybct-admin-log:
+      context-path: "/admin-log/"
+      service-id: taybct-admin-log
+    taybct-scheduling:
+      context-path: "/scheduling/"
+  params:
+    map:
+      # 菜单默认的 Layout 的 id
+      "menu_layout": 0
+      # 默认的 ROOT 角色 id 是 1
+      "role_root_id": 1
+      # 默认 ROOT 用户的 id 是 1
+      "user_root_id": 1
+      # 默认密码
+      "user_passwd": 123456
+      # 默认角色，游客
+      "user_role": TOURIST
+      # 默认的游客角色 id
+      "user_role_id": 5
+      # 用户默认状态
+      "user_status": 1
+      # 默认租户 id
+      "tenant_id": "000000"
+      # 是否需要验证码登录
+      "enable_captcha": false
+      # 验证码的类型，可以查看枚举：io.github.mangocrisp.spring.taybct.common.enums.CaptchaType，可选：CIRCLE，GIF，LINE，SHEAR，默认 GIF
+      "captcha_type": GIF
+  secure:
+    # 黑名单
+    black-list:
+      urls:
+        - "actuator/**"
+    # 不校验白名单
+    ignore:
+      urls:
+        # 注册客户端
+        - "/registeredClient"
+        # 登录登出
+        - "/auth/oauth/**"
+        - "/oauth/logout"
+        - "/login/**"
+        - "/logout/**"
+        # 静态资源
+        - "/csrf"
+        - "/error"
+        - "/static/**"
+        - "/locate/**"
+        - "/favicon.ico"
+        # 文件
+        - "/admin-file/statics/**"
+        # Monitor
+        - "/assets/**"
+        - "/variables.css"
+        - "/login"
+        - "/actuator/**"
+        - "/instances/**"
+        # 验证码
+        - "/captcha"
+        - "/enableCaptcha"
+        # 允许获取公钥接口的访问
+        - "/rsa/publicKey"
+        - "/sm2/publicKey"
+        # swagger
+        - "/*/v3/api-docs"
+        - "/*/v3/api-docs/default"
+        - "/v3/**"
+        - "/doc.html"
+        - "/swagger-ui/**"
+        - "/swagger-resources"
+        - "/swagger-resources/**"
+        - "/webjars/**"
+        - "/swagger-ui.html"
+        # es
+        - "/es/**"
+        # 字典
+        - "/system/v1/params/cache/sys_title"
+      # 刷新令牌不需要验证码
+      captcha-grant-type:
+        - "refresh_token" # 刷新令牌不需要验证码
+      client:
+        - h5_app
+        - wechat_app
+    captcha-urls: # 需要验证码的请求
+      - "/auth/oauth/token"
+      - "/auth/oauth/login"
+    captcha-authorizations:
+      - "Basic dGF5YmN0X3BjOmUxMGFkYzM5NDliYTU5YWJiZTU2ZTA1N2YyMGY4ODNl"
+    allow-when-no-match: true
+    auth:
+      client:
+        client-id: taybct_pc
+        client-secret: e10adc3949ba59abbe56e057f20f883e
+        client-name: "测试客户端"
+        auto-approve: true
+        web-server-redirect-uri: http://127.0.0.1/authorized
+        authorized-grant-types: authorization_code,taybct,password,refresh_token,sms,wechat_qr_code,client_credentials,pki,taybct_refresh
+        scope: message.read,message.write
+        access-token-validity: 7200
+        refresh-token-validity: 86400
+      user:
+        username: root
+        roles: "000000:ROOT"
+        user-id: 1
+        status: 1
+        password: "07403b4a6e23f1a9a3476f5323a063cffd61fad5183ab7f808054f9211d2ea1b"
+  tenant:
+    enable: true
+    tenant-id-column: tenant_id
+    tenant-tables:
+      - sys_role
+      - api_log
+      - scheduled_task
+      - scheduled_log
+  rsa:
+    # resources 目录下的证书
+    resource: rsa.jks
+    # 生成证书的时候配置的 alias
+    alias: rsa
+    # 生成证书的时候配置的 密码
+    password: taybct
+    expire-check: true
+    type:
+      JWT:
+        resource: jwt.jks
+        alias: jwt
+        password: taybct
+        expire-check: true
+  sm2:
+    # resources 目录下的证书
+    resource: sm2.jks
+    # 生成证书的时候配置的 alias
+    alias: sm2
+    # 生成证书的时候配置的 密码
+    password: taybct
+  datasource:
+    # 数据源加密连接
+    encrypted-connection:
+      # 开启是否？
+      enabled: true
+      # 配置统一的解码器
+      decrypt-function: io.github.mangocrisp.spring.taybct.tool.core.util.sm.SM4Coder.De
+      # 为每个数据源配置解码器
+      decrypt-functions:
+        master: io.github.mangocrisp.spring.taybct.tool.core.util.sm.SM4Coder.De
+        slave1: io.github.mangocrisp.spring.taybct.tool.core.util.sm.SM4Coder.De

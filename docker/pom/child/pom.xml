@@ -1,0 +1,22 @@
+<build>
+    <plugins>
+        <!-- 构建和推动Docker镜像 -->
+        <plugin>
+            <groupId>com.spotify</groupId>
+            <artifactId>dockerfile-maven-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>default</id>
+                    <goals>
+                        <!--如果package时不想用docker打包,就注释掉这个goal-->
+                        <goal>build</goal>
+                        <goal>push</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <tag>${project.version}</tag>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
