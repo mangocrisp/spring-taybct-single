@@ -1,0 +1,23 @@
+taybct:
+  prop-config:
+    config:
+      name: name
+      age: 26
+      isOk: true
+    apps:
+      xxx:
+        config:
+          name: xxx
+          age: 24
+      taybct-admin-log:
+        config:
+          name: def
+          age: 25
+          isOk: false
+          time: "2020-05-10 16:30:30"
+      test-module-security:
+        config:
+          name: def
+          age: 25
+          isOk: false
+          time: "2020-05-10 16:30:30"

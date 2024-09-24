@@ -1,0 +1,30 @@
+taybct:
+  global-exception:
+    config:
+      - name: 违反唯一约束
+        clazz: org.springframework.dao.DuplicateKeyException
+        code: SQL_1062
+        message: 数据已存在
+      - clazz: org.springframework.http.converter.HttpMessageNotReadableException
+        name: 数据类型转换异常
+        code: DATA_CONVERT_500
+        message: 数据类型转换异常，请检查数据是否正确
+      - clazz: java.util.DuplicateFormatFlagsException
+        name: 不知道是什么异常
+        code: DEMO_EXCEPTION_3
+        message: 这个只是测试的异常啦
+      - clazz: org.springframework.security.authentication.InsufficientAuthenticationException
+        name: 资源禁止访问
+        code: FORBIDDEN_403
+        message: 没有足够的权限访问该接口
+        http-status: FORBIDDEN
+      - clazz: org.springframework.web.method.annotation.HandlerMethodValidationException
+        name: 请求参数异常
+        code: BAD_REQUEST_400
+        message: 请求参数异常
+        http-status: BAD_REQUEST
+      - clazz: org.springframework.security.access.AccessDeniedException
+        name: 请求被拒绝
+        code: ACCESS_DENIED_403
+        message: 没有足够的权限访问该接口
+        http-status: FORBIDDEN

@@ -1,0 +1,6 @@
+spring:
+  elasticsearch:
+    # kibana 5601
+    uris: https://127.0.0.1:9200
+    username: "elastic"
+    password: "R9I*Fa+K=L_R2C_W1XN7"

@@ -1,0 +1,60 @@
+# 应用版本号
+application:
+  version: 3.2.0-alpha.1
+#服务器配置
+server:
+  undertow:
+    threads:
+      # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+      io: 4
+      # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载
+      worker: 20
+    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+    buffer-size: 1024
+    # 是否分配的直接内存
+    direct-buffers: true
+  compression:
+    # 是否开启压缩 开了全局就不要开fegin的压缩请求 互斥
+    enabled: true
+    # 配置支持压缩的 MIME TYPE
+    mime-types: text/html,text/xml,text/plain,application/xml,application/json
+  port: 9102
+  servlet:
+    context-path: /
+# Spring
+spring:
+  main:
+    #springCloud 的2.1.0以上版本的，将不再默认支持 FeignClient 的name属性 的相同名字。
+    #即 ：多个接口上的@FeignClient(“相同服务名”)会报错，overriding is disabled(覆盖 是 禁止的/关闭的)。
+    allow-bean-definition-overriding: true
+  application:
+    # 应用名称
+    name: spring-taybct-single
+  profiles:
+    # 环境配置
+    active: dev
+    include:
+      - datasource
+      - es
+      - file
+      - global-exception
+      - taybct
+      - mq
+      - mybatis
+      - prop
+      - redis
+      - swagger
+      - data-scope
+      - scheduled-tasks
+  servlet:
+    multipart:
+      max-file-size: 10MB        # 设置单个文件最大大小为10MB
+      max-request-size: 100MB    # 设置多个文件大小为100MB
+# 日志文件
+logging:
+  file:
+    name: logs/${spring.application.name}/info.log
+#  level:
+#    io.github.mangocrisp.spring.taybct.auth: DEBUG
+#    org.springframework.security: DEBUG
+#    org.springframework.jdbc.core: DEBUG

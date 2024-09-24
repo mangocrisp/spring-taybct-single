@@ -1,0 +1,38 @@
+taybct:
+  data-scope:
+    # 部门表主键
+    dept-id: id
+    # 部门表名
+    dept-table: sys_dept
+    # 所有的父级的字段
+    dept-pid-all: pid_all
+    # 是否逻辑删除
+    logic-delete: true
+    # 逻辑删除的字段
+    logic-field: is_deleted
+    # 逻辑未删除的状态
+    not-deleted-status: 0
+    # 角色 ocde
+    role-code: code
+    # 角色表的主键
+    role-field: id
+    # 角色表名
+    role-table: sys_role
+    # 部门角色关联表
+    role-scope-table: sys_role_dept
+    # 部门角色关联表 - 部门 id
+    role-scope-dept-id: dept_id
+    # 部门角色关联表 - 角色 id
+    role-scope-field: role_id
+    # 一对多权限关联表
+    multi-table: sys_user_dept
+    # 一对多权限关联表 - 部门 id
+    multi-dept-id: dept_id
+    # 一对多权限关联表 - 用户 id
+    multi-filed: user_id
+    # 用户部门关联表
+    user-scope-table: sys_user_dept
+    # 用户部门关联表 - 部门 id
+    user-scope-dept-id: dept_id
+    # 用户部门关联表 - 用户 id
+    user-scope-field: user_id
