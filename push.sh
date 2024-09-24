@@ -1,1 +1,1 @@
-docker push 139.9.74.180:5050/zhsq/dev/taybct/docker-registry:3.1.0-beta.7
+docker push 139.9.74.180:5050/data/dev/taybct/docker-registry:3.1.0-beta.7
