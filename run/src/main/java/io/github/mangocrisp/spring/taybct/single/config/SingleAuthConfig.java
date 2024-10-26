@@ -1,5 +1,6 @@
 package io.github.mangocrisp.spring.taybct.single.config;
 
+import cn.afterturn.easypoi.handler.inter.IExcelDictHandler;
 import io.github.mangocrisp.spring.taybct.auth.security.filter.CaptchaFilter;
 import io.github.mangocrisp.spring.taybct.auth.security.filter.LoginFilter;
 import io.github.mangocrisp.spring.taybct.auth.security.filter.PasswordCheckFilter;
@@ -8,12 +9,17 @@ import io.github.mangocrisp.spring.taybct.auth.security.handle.PasswordException
 import io.github.mangocrisp.spring.taybct.auth.service.IRegisteredService;
 import io.github.mangocrisp.spring.taybct.common.prop.SecureProp;
 import io.github.mangocrisp.spring.taybct.module.system.handle.AuthServeClientHandle;
+import io.github.mangocrisp.spring.taybct.module.system.service.ISysDictService;
 import io.github.mangocrisp.spring.taybct.module.system.service.ISysUserOnlineService;
 import io.github.mangocrisp.spring.taybct.module.system.service.ISysUserService;
 import io.github.mangocrisp.spring.taybct.single.handle.AuthServeClientSingleHandle;
 import io.github.mangocrisp.spring.taybct.single.handle.AuthUserDetailsHandle;
+import io.github.mangocrisp.spring.taybct.single.handle.ExcelDictHandlerImpl;
 import io.github.mangocrisp.spring.taybct.tool.core.constant.ISysParamsObtainService;
 import io.github.mangocrisp.spring.taybct.tool.core.exception.handler.IGlobalExceptionReporter;
+import io.github.mangocrisp.spring.taybct.tool.core.poi.easypoi.service.IExcelService;
+import io.github.mangocrisp.spring.taybct.tool.core.poi.easypoi.service.impl.ExcelServiceImpl;
+import io.github.mangocrisp.spring.taybct.tool.core.poi.easypoi.util.EasyPOIUtil;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -108,4 +114,15 @@ public class SingleAuthConfig {
 //        return new EncryptedDataSourceInitEvent(properties);
 //    }
 
+    @Bean
+    public IExcelDictHandler excelDictHandler(ISysDictService sysDictService) {
+        IExcelDictHandler excelDictHandler = new ExcelDictHandlerImpl(sysDictService);
+        EasyPOIUtil.excelDictHandler = excelDictHandler;
+        return excelDictHandler;
+    }
+
+    @Bean
+    public IExcelService excelService() {
+        return new ExcelServiceImpl();
+    }
 }

@@ -28,6 +28,30 @@
             <artifactId>spring-taybct-tool-core</artifactId>
         </dependency>
 
+        <!--easyexcel poi 操作导入导出 excel-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+        </dependency>
+        <!-- easypoi的支持 -->
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.afterturn</groupId>
+            <artifactId>easypoi-annotation</artifactId>
+        </dependency>
+        <!--excel模板导出-->
+        <dependency>
+            <groupId>net.sf.jxls</groupId>
+            <artifactId>jxls-core</artifactId>
+        </dependency>
+
         <!--鉴权-->
         <dependency>
             <groupId>io.github.mangocrisp</groupId>
