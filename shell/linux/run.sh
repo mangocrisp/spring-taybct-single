@@ -10,7 +10,7 @@ echo "*****************尝试重启中*****************"
 oldpid=`env/linux/jdk-17.0.5/bin/jps | grep $jar | grep -v "prep" | awk '{print $1}'`
 kill -9 $oldpid
 if [ "$?" -eq 0 ]; then
-    echo "kill 成功，pid：$oldpid"
+    echo "kill 成功，pid：$oldpid"z``
 else
     echo "kill 失败，没有找到对应的进程"
 fi
