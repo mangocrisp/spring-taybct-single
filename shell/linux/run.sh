@@ -1,6 +1,6 @@
 #!/bin/bash
 # 清除之前运行的控制台输出日志
-echo "">run.jar.out
+echo "">$1.out
 # 指定jdk的 java 命令，你也可以指定对应的 jdk 版本
 java=env/linux/jdk-17.0.5/bin/java
 # 打包好后的jar包名，每个服务的 jar 包名不一样
@@ -27,6 +27,6 @@ vm=-Dfile.encoding=utf-8 \
 params=--spring.profiles.active=test
 echo "启动中：$jar"
 # 组合成启动命令，后台运行，并且把控制台日志输出到 run.jar.out 文件
-nohup $java $vm -jar $jar $params >run.jar.out 2>&1 &
+nohup $java $vm -jar $jar $params >$1.out 2>&1 &
 nowpid=`jps | grep $jar | grep -v "prep" | awk '{print $1}'`
 echo "*****************启动成功，pid：$nowpid"*****************"
