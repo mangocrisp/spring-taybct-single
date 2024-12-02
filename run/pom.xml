@@ -166,7 +166,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -181,8 +181,8 @@
                             <target>
                                 <!--suppress UnresolvedMavenProperty -->
                                 <copy overwrite="true"
-                                      tofile="${maven.multiModuleProjectDirectory}/target/${project.artifactId}.jar"
-                                      file="${project.build.directory}/${project.artifactId}.jar"/>
+                                      tofile="${maven.multiModuleProjectDirectory}/target/${project.build.finalName}.jar"
+                                      file="${project.build.directory}/${project.build.finalName}.jar"/>
                             </target>
                         </configuration>
                     </execution>
