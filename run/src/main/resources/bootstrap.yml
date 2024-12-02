@@ -18,7 +18,6 @@ server:
     enabled: true
     # 配置支持压缩的 MIME TYPE
     mime-types: text/html,text/xml,text/plain,application/xml,application/json
-  port: 9102
   servlet:
     context-path: /
 # Spring
