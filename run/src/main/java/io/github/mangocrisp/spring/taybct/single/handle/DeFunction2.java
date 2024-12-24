@@ -5,9 +5,9 @@ import java.util.function.Function;
 /**
  * @author XiJieYin <br> 2024/4/24 11:49
  */
-public class DeFunction2 implements Function<String, String> {
+public class DeFunction2 implements Function<Object, Object> {
     @Override
-    public String apply(String s) {
-        return s.replace("加密", "") + "解密2";
+    public Object apply(Object s) {
+        return ((String) s).replace("加密", "") + "解密2";
     }
 }

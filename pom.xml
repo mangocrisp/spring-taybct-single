@@ -6,7 +6,7 @@
 
     <groupId>io.github.mangocrisp</groupId>
     <artifactId>spring-taybct-single</artifactId>
-    <version>3.2.0-alpha.1</version>
+    <version>3.2.0</version>
     <name>Spring TayBct Single</name>
     <description>Spring TayBct Single</description>
     <packaging>pom</packaging>
@@ -40,9 +40,9 @@
         <!--spring boot 版本依赖-->
         <spring-boot.version>3.2.5</spring-boot.version>
         <!--框架版本-->
-        <spring-taybct.version>3.2.0-alpha.1</spring-taybct.version>
+        <spring-taybct.version>3.2.0</spring-taybct.version>
         <!--工具版本-->
-        <spring-taybct-tools.version>3.2.0-alpha.1</spring-taybct-tools.version>
+        <spring-taybct-tools.version>3.2.0</spring-taybct-tools.version>
     </properties>
 
     <!-- 依赖声明 -->

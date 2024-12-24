@@ -1,6 +1,6 @@
 # 应用版本号
 application:
-  version: 3.2.0-alpha.1
+  version: 3.2.0
 #服务器配置
 server:
   undertow:
