@@ -102,28 +102,16 @@ public class AuthServerConfigurer {
             , OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator
             , OAuth2AuthorizationService authorizationService
             , PKIProp pkiProp
-            , StringRedisTemplate redisTemplate
-            , SysUserMapper sysUserMapper) {
+            , StringRedisTemplate redisTemplate) {
         return new PKITokenEndpointConfigurer(passwordEncoder
                 , tokenGenerator
                 , authorizationService
                 , pkiProp
                 , redisTemplate
                 , idCard -> {
-            throw new BaseException("");
-//                    return Optional.ofNullable(sysUserMapper.getUserByIdCard(idCard))
-//                    .map(user -> {
-//                        // 这里需要把从数据库拿出来的 RSA 加密的密码解密然后再去与前端的密码做比较
-//                        // TODO 这里因为密码有可能也是临时设置的，所以不需要加密
-//                        //user.setPassword(passwordEncoder.encode(user.getPassword()));
-//                        OAuth2UserDetails userDetails = new OAuth2UserDetails(user);
-//                        // 当前使用的认证方式是品高登录方式
-//                        userDetails.setAuthenticationMethod(OAuthenticationMethodType.ID_CARD.getValue());
-//                        // 登录的时候使用的主体
-//                        userDetails.setPrincipal(idCard);
-//                        return userDetails;
-//                    }).orElseThrow(() -> new UsernameNotFoundException(ResultCode.USER_NOT_EXIST.getMessage()));
-        });
+                    // 这里需要提供一个根据身份证查询用户的返回结果
+                    throw new BaseException("未找到用户");
+                });
     }
 
     /**
