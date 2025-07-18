@@ -16,13 +16,13 @@ taybct:
       context-path: "/admin-file/"
     taybct-system:
       context-path: "/system/"
-      service-id: taybct-system
+      service-id: module-system
     taybct-auth:
       context-path: "/auth/"
-      service-id: taybct-auth
+      service-id: auth
     taybct-admin-log:
       context-path: "/admin-log/"
-      service-id: taybct-admin-log
+      service-id: admin-log
     taybct-scheduling:
       context-path: "/scheduling/"
   params:
