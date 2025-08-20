@@ -1,5 +1,4 @@
 taybct:
-  config-prefix: taybct
   message:
     # 文件夹
     folder: temp/${spring.application.name}/log
@@ -50,16 +49,15 @@ taybct:
   secure:
     # 黑名单
     black-list:
-      urls:
+      uris:
         - "actuator/**"
     # 不校验白名单
     ignore:
-      urls:
-        # 注册客户端
-        - "/registeredClient"
-        # 登录登出
+      uris:
+        # 鉴权
         - "/auth/oauth/**"
         - "/oauth/logout"
+        - "/data/**"
         - "/login/**"
         - "/logout/**"
         # 静态资源
@@ -92,6 +90,8 @@ taybct:
         - "/swagger-resources/**"
         - "/webjars/**"
         - "/swagger-ui.html"
+        # 注册客户端
+        - "/registeredClient"
         # es
         - "/es/**"
         # 字典

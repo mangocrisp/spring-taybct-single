@@ -1,0 +1,147 @@
+package io.github.mangocrisp.spring.taybct.module.system.poi.exp;
+
+import com.alibaba.excel.annotation.ExcelIgnore;
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.*;
+import jakarta.validation.constraints.NotBlank;
+import io.github.mangocrisp.spring.taybct.tool.core.constant.DateConstants;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import java.io.Serializable;
+
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.hibernate.validator.constraints.Length;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.springframework.format.annotation.DateTimeFormat;
+import lombok.*;
+import java.io.Serial;
+
+/**
+ * <pre>
+ * 前端通用模板下载对象
+ * </pre>
+ *
+ * @author SuMuYue
+ * @since 2025-08-15 11:12:11
+ * @see io.github.mangocrisp.spring.taybct.module.system.domain.VueTemplate
+ */
+@Data
+@EqualsAndHashCode
+@HeadRowHeight(25)
+@ContentRowHeight(20)
+@ColumnWidth(20)
+@HeadFontStyle(fontName = "微软雅黑", fontHeightInPoints = 14)
+@ContentFontStyle(fontName = "微软雅黑", fontHeightInPoints = 12)
+public class VueTemplateExpVO implements Serializable {
+
+    @Serial
+    @ExcelIgnore
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 主键
+     */
+    @ExcelProperty(value = "主键")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
+
+    /**
+     * 创建人
+     */
+    @ExcelProperty(value = "创建人")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long createUser;
+    /**
+     * 创建时间
+     */
+    @ExcelProperty(value = "创建时间")
+    @DateTimeFormat(pattern = DateConstants.format.YYYY_MM_DD_HH_mm_ss)
+    @JsonFormat(pattern = DateConstants.format.YYYY_MM_DD_HH_mm_ss)
+    private LocalDateTime createTime;
+    /**
+     * 修改人
+     */
+    @ExcelProperty(value = "修改人")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long updateUser;
+    /**
+     * 修改时间
+     */
+    @ExcelProperty(value = "修改时间")
+    @DateTimeFormat(pattern = DateConstants.format.YYYY_MM_DD_HH_mm_ss)
+    @JsonFormat(pattern = DateConstants.format.YYYY_MM_DD_HH_mm_ss)
+    private LocalDateTime updateTime;
+    /**
+     * 是否已删除
+     */
+    @ExcelProperty(value = "是否已删除")
+    private Integer isDeleted;
+    /**
+     * 字符串类型
+     */
+    @ExcelProperty(value = "字符串类型")
+    private String string;
+    /**
+     * 整数类型
+     */
+    @ExcelProperty(value = "整数类型")
+    private Integer numberInt;
+    /**
+     * 长整数类型
+     */
+    @ExcelProperty(value = "长整数类型")
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long numberLong;
+    /**
+     * 日期类型
+     */
+    @ExcelProperty(value = "日期类型")
+    @DateTimeFormat(pattern = DateConstants.format.YYYY_MM_DD)
+    @JsonFormat(pattern = DateConstants.format.YYYY_MM_DD)
+    private LocalDate date;
+    /**
+     * 日期时间类型
+     */
+    @ExcelProperty(value = "日期时间类型")
+    @DateTimeFormat(pattern = DateConstants.format.YYYY_MM_DD_HH_mm_ss)
+    @JsonFormat(pattern = DateConstants.format.YYYY_MM_DD_HH_mm_ss)
+    private LocalDateTime dateTime;
+    /**
+     * 字节类型
+     */
+    @ExcelProperty(value = "字节类型")
+    private Integer numberByte;
+    /**
+     * 布尔类型
+     */
+    @ExcelProperty(value = "布尔类型")
+    private Boolean boolType;
+    /**
+     * 长文本类型
+     */
+    @ExcelProperty(value = "长文本类型")
+    private String textType;
+    /**
+     * JSON 类型
+     */
+    @ExcelProperty(value = "JSON 类型")
+    private Object jsonType;
+    /**
+     * 单精度浮点类型
+     */
+    @ExcelProperty(value = "单精度浮点类型")
+    private Float floatType;
+    /**
+     * 双精度浮点类型
+     */
+    @ExcelProperty(value = "双精度浮点类型")
+    private Double doubleType;
+
+}

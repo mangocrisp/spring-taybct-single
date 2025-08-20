@@ -28,3 +28,8 @@ taybct:
         code: ACCESS_DENIED_403
         message: 没有足够的权限访问该接口
         http-status: FORBIDDEN
+      - clazz: io.github.mangocrisp.spring.taybct.auth.exception.AccountException
+        name: 鉴权认证失败
+        code: ACCESS_UNAUTHORIZED_401
+        message: 鉴权认证失败
+        http-status: UNAUTHORIZED

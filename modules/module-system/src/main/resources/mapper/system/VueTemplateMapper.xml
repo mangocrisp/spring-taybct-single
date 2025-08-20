@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.module.system.mapper.VueTemplateMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.module.system.domain.VueTemplate">
+            <id property="id" column="t_vue_template_id" jdbcType="BIGINT"/>
+            <result property="createUser" column="t_vue_template_create_user" jdbcType="BIGINT"/>
+            <result property="createTime" column="t_vue_template_create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateUser" column="t_vue_template_update_user" jdbcType="BIGINT"/>
+            <result property="updateTime" column="t_vue_template_update_time" jdbcType="TIMESTAMP"/>
+            <result property="isDeleted" column="t_vue_template_is_deleted" jdbcType="SMALLINT"/>
+            <result property="string" column="t_vue_template_string" jdbcType="VARCHAR"/>
+            <result property="numberInt" column="t_vue_template_number_int" jdbcType="INTEGER"/>
+            <result property="numberLong" column="t_vue_template_number_long" jdbcType="BIGINT"/>
+            <result property="date" column="t_vue_template_date" jdbcType="DATE"/>
+            <result property="dateTime" column="t_vue_template_date_time" jdbcType="TIMESTAMP"/>
+            <result property="numberByte" column="t_vue_template_number_byte" jdbcType="SMALLINT"/>
+            <result property="boolType" column="t_vue_template_bool_type" jdbcType="BOOLEAN"/>
+            <result property="textType" column="t_vue_template_text_type" jdbcType="VARCHAR"/>
+            <result property="jsonType" column="t_vue_template_json_type" jdbcType="OTHER"/>
+            <result property="floatType" column="t_vue_template_float_type" jdbcType="REAL"/>
+            <result property="doubleType" column="t_vue_template_double_type" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <!--分页返回结果-->
+    <resultMap id="BasePageResultMap" type="io.github.mangocrisp.spring.taybct.module.system.domain.VueTemplate" extends="BaseResultMap">
+        <!--这里返回的是可扩展的返回结果 vo 之类的-->
+        <!--<collection property="实体类里面的属性" javaType="返回的集合是什么集合的类型如：java.util.List" resultMap="指定映射集合类元素的类型的 resultMap"/>-->
+        <!--<association property="实体类里面的属性" column="关联的另一张表的主键" javaType="另一张表对应的实体类" resultMap="指定映射属性对应对象的 resultMap"/>-->
+    </resultMap>
+
+    <!--表名-->
+    <sql id="Base_Table_Name">t_vue_template</sql>
+
+    <!--列名-->
+    <sql id="Base_Column_List">
+        t_vue_template.id as t_vue_template_id,t_vue_template.create_user as t_vue_template_create_user,t_vue_template.create_time as t_vue_template_create_time,
+        t_vue_template.update_user as t_vue_template_update_user,t_vue_template.update_time as t_vue_template_update_time,t_vue_template.is_deleted as t_vue_template_is_deleted,
+        t_vue_template.string as t_vue_template_string,t_vue_template.number_int as t_vue_template_number_int,t_vue_template.number_long as t_vue_template_number_long,
+        t_vue_template.date as t_vue_template_date,t_vue_template.date_time as t_vue_template_date_time,t_vue_template.number_byte as t_vue_template_number_byte,
+        t_vue_template.bool_type as t_vue_template_bool_type,t_vue_template.text_type as t_vue_template_text_type,t_vue_template.json_type as t_vue_template_json_type,
+        t_vue_template.float_type as t_vue_template_float_type,t_vue_template.double_type as t_vue_template_double_type
+    </sql>
+
+    <select id="listMap" resultType="java.util.Map">
+        select
+        <choose>
+            <when test="mo.selectedFieldSet != null and mo.selectedFieldSet.size() > 0">
+                <foreach collection="mo.selectedFieldSet" separator="," item="field">
+                    temp.${field}
+                </foreach>
+            </when>
+            <otherwise>
+                temp.*
+            </otherwise>
+        </choose>
+        from (
+            select s.*
+            from (
+            <include refid="page_sql"/>
+            ) s
+        ) temp
+    </select>
+
+    <update id="updateBatchByCondition">
+        update <include refid="Base_Table_Name"/>
+        <set>
+            <if test="mo.bean.createUser != null">
+                ,create_user = #{mo.bean.createUser,jdbcType=BIGINT}
+            </if>
+            <if test="mo.bean.createTime != null">
+                ,create_time = #{mo.bean.createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="mo.bean.updateUser != null">
+                ,update_user = #{mo.bean.updateUser,jdbcType=BIGINT}
+            </if>
+            <if test="mo.bean.updateTime != null">
+                ,update_time = #{mo.bean.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="mo.bean.isDeleted != null">
+                ,is_deleted = #{mo.bean.isDeleted,jdbcType=SMALLINT}
+            </if>
+            <if test="mo.bean.string != null">
+                ,string = #{mo.bean.string,jdbcType=VARCHAR}
+            </if>
+            <if test="mo.bean.numberInt != null">
+                ,number_int = #{mo.bean.numberInt,jdbcType=INTEGER}
+            </if>
+            <if test="mo.bean.numberLong != null">
+                ,number_long = #{mo.bean.numberLong,jdbcType=BIGINT}
+            </if>
+            <if test="mo.bean.date != null">
+                ,date = #{mo.bean.date,jdbcType=DATE}
+            </if>
+            <if test="mo.bean.dateTime != null">
+                ,date_time = #{mo.bean.dateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="mo.bean.numberByte != null">
+                ,number_byte = #{mo.bean.numberByte,jdbcType=SMALLINT}
+            </if>
+            <if test="mo.bean.boolType != null">
+                ,bool_type = #{mo.bean.boolType,jdbcType=BOOLEAN}
+            </if>
+            <if test="mo.bean.textType != null">
+                ,text_type = #{mo.bean.textType,jdbcType=VARCHAR}
+            </if>
+            <if test="mo.bean.jsonType != null">
+                ,json_type = #{mo.bean.jsonType,jdbcType=OTHER}
+            </if>
+            <if test="mo.bean.floatType != null">
+                ,float_type = #{mo.bean.floatType,jdbcType=REAL}
+            </if>
+            <if test="mo.bean.doubleType != null">
+                ,double_type = #{mo.bean.doubleType,jdbcType=DOUBLE}
+            </if>
+        </set>
+        <where>
+            <!--主键-->
+            <if test="mo.params.id != null">
+                and t_vue_template.id = #{mo.params.id}
+            </if>
+            <!--当前表的查询条件-->
+            <if test="mo.params.vueTemplateQueryDTO != null">
+            <include refid="DTO_Condition"/>
+            </if>
+            <!--TODO 继续添加查询条件-->
+        </where>
+    </update>
+
+    <!--查询总数-->
+    <select id="total" resultType="java.lang.Long">
+        select count(1) from (
+            <include refid="Base_Query"/>
+        ) temp
+    </select>
+
+    <!--查询分页-->
+    <sql id="page_sql">
+        select t.*
+        from (
+            <include refid="Base_Page_Query"/>
+        ) t
+        <if test="mo.page != null and mo.page.sort != null">
+        order by <foreach collection="mo.page.sort" item="item" separator=","> t.t_vue_template_${item}</foreach>
+        </if>
+    </sql>
+    <!--查询分页-->
+    <select id="page" resultMap="BasePageResultMap">
+        select
+        <choose>
+            <when test="mo.selectedFieldSet != null and mo.selectedFieldSet.size() > 0">
+                <foreach collection="mo.selectedFieldSet" separator="," item="field">
+                    temp.${field}
+                </foreach>
+            </when>
+            <otherwise>
+                temp.*
+            </otherwise>
+        </choose>
+        from (
+        <include refid="page_sql"/>
+        ) temp
+    </select>
+
+    <!--查询详情-->
+    <sql id="detail_sql">
+        select t.*
+        from (
+            <include refid="Base_Query"/>
+        ) t
+    </sql>
+    <!--查询详情-->
+    <select id="detail" resultMap="BasePageResultMap">
+        select
+        <choose>
+            <when test="mo.selectedFieldSet != null and mo.selectedFieldSet.size() > 0">
+                <foreach collection="mo.selectedFieldSet" separator="," item="field">
+                    temp.${field}
+                </foreach>
+            </when>
+            <otherwise>
+                temp.*
+            </otherwise>
+        </choose>
+        from (
+        <include refid="detail_sql"/>
+        ) temp
+    </select>
+
+    <!--基础查询-->
+    <sql id="Base_Query">
+        select <include refid="Base_Column_List"/>
+        from <include refid="Base_Table_Name"/>
+        <include refid="Base_Condition"/>
+    </sql>
+
+    <!--对象参数查询条件-->
+    <sql id="DTO_Condition">
+        <!--主键-->
+        <if test="mo.params.vueTemplateQueryDTO.id != null">
+            and t_vue_template.id = #{mo.params.vueTemplateQueryDTO.id}
+        </if>
+        <!--主键选择-->
+        <if test="mo.params.vueTemplateQueryDTO.idSelection != null and mo.params.vueTemplateQueryDTO.idSelection.size() > 0">
+            and t_vue_template.id in
+            <foreach collection="mo.params.vueTemplateQueryDTO.idSelection" open="(" separator="," close=")" item="id">
+                #{id}
+            </foreach>
+        </if>
+        <!--创建人-->
+        <if test="mo.params.vueTemplateQueryDTO.createUser != null">
+            and t_vue_template.create_user = #{mo.params.vueTemplateQueryDTO.createUser}
+        </if>
+        <!--创建时间-->
+        <if test="mo.params.vueTemplateQueryDTO.createTime_ge != null">
+            and t_vue_template.create_time &gt;= #{mo.params.vueTemplateQueryDTO.createTime_ge}
+        </if>
+        <if test="mo.params.vueTemplateQueryDTO.createTime_le != null">
+            and t_vue_template.create_time &lt;= #{mo.params.vueTemplateQueryDTO.createTime_le}
+        </if>
+        <!--修改人-->
+        <if test="mo.params.vueTemplateQueryDTO.updateUser != null">
+            and t_vue_template.update_user = #{mo.params.vueTemplateQueryDTO.updateUser}
+        </if>
+        <!--修改时间-->
+        <if test="mo.params.vueTemplateQueryDTO.updateTime_ge != null">
+            and t_vue_template.update_time &gt;= #{mo.params.vueTemplateQueryDTO.updateTime_ge}
+        </if>
+        <if test="mo.params.vueTemplateQueryDTO.updateTime_le != null">
+            and t_vue_template.update_time &lt;= #{mo.params.vueTemplateQueryDTO.updateTime_le}
+        </if>
+        <!--是否已删除-->
+        <if test="mo.params.vueTemplateQueryDTO.isDeleted != null">
+            and t_vue_template.is_deleted = #{mo.params.vueTemplateQueryDTO.isDeleted}
+        </if>
+        <!--字符串类型-->
+        <if test="mo.params.vueTemplateQueryDTO.string != null and mo.params.vueTemplateQueryDTO.string != ''">
+            and t_vue_template.string = #{mo.params.vueTemplateQueryDTO.string}
+        </if>
+        <!--整数类型-->
+        <if test="mo.params.vueTemplateQueryDTO.numberInt != null">
+            and t_vue_template.number_int = #{mo.params.vueTemplateQueryDTO.numberInt}
+        </if>
+        <!--长整数类型-->
+        <if test="mo.params.vueTemplateQueryDTO.numberLong != null">
+            and t_vue_template.number_long = #{mo.params.vueTemplateQueryDTO.numberLong}
+        </if>
+        <!--日期类型-->
+        <if test="mo.params.vueTemplateQueryDTO.date_ge != null">
+            and t_vue_template.date &gt;= #{mo.params.vueTemplateQueryDTO.date_ge}
+        </if>
+        <if test="mo.params.vueTemplateQueryDTO.date_le != null">
+            and t_vue_template.date &lt;= #{mo.params.vueTemplateQueryDTO.date_le}
+        </if>
+        <!--日期时间类型-->
+        <if test="mo.params.vueTemplateQueryDTO.dateTime_ge != null">
+            and t_vue_template.date_time &gt;= #{mo.params.vueTemplateQueryDTO.dateTime_ge}
+        </if>
+        <if test="mo.params.vueTemplateQueryDTO.dateTime_le != null">
+            and t_vue_template.date_time &lt;= #{mo.params.vueTemplateQueryDTO.dateTime_le}
+        </if>
+        <!--字节类型-->
+        <if test="mo.params.vueTemplateQueryDTO.numberByte != null">
+            and t_vue_template.number_byte = #{mo.params.vueTemplateQueryDTO.numberByte}
+        </if>
+        <!--布尔类型-->
+        <if test="mo.params.vueTemplateQueryDTO.boolType != null">
+            and t_vue_template.bool_type = #{mo.params.vueTemplateQueryDTO.boolType}
+        </if>
+        <!--长文本类型-->
+        <if test="mo.params.vueTemplateQueryDTO.textType != null and mo.params.vueTemplateQueryDTO.textType != ''">
+            and t_vue_template.text_type = #{mo.params.vueTemplateQueryDTO.textType}
+        </if>
+        <!--JSON 类型-->
+        <if test="mo.params.vueTemplateQueryDTO.jsonType != null">
+            and t_vue_template.json_type = #{mo.params.vueTemplateQueryDTO.jsonType}
+        </if>
+        <!--单精度浮点类型-->
+        <if test="mo.params.vueTemplateQueryDTO.floatType != null">
+            and t_vue_template.float_type = #{mo.params.vueTemplateQueryDTO.floatType}
+        </if>
+        <!--双精度浮点类型-->
+        <if test="mo.params.vueTemplateQueryDTO.doubleType != null">
+            and t_vue_template.double_type = #{mo.params.vueTemplateQueryDTO.doubleType}
+        </if>
+    </sql>
+
+    <!--基础条件-->
+    <sql id="Base_Condition">
+        <where>
+            <if test="mo.conditions != null and mo.conditions.basic != null">
+                and (
+                    ${mo.conditions.basic}
+                )
+            </if>
+            <!--主键-->
+            <if test="mo.params.id != null">
+                and t_vue_template.id = #{mo.params.id}
+            </if>
+            <!--当前表的查询条件-->
+            <if test="mo.params.vueTemplateQueryDTO != null">
+            <include refid="DTO_Condition"/>
+            </if>
+            <!--TODO 继续添加查询条件-->
+        </where>
+    </sql>
+
+    <sql id="Base_Page_Order_By">
+        <if test="mo.page != null and mo.page.sort != null">
+        order by <foreach collection="mo.page.sort" item="item" separator=","> t_vue_template.${item}</foreach>
+        </if>
+    </sql>
+
+    <!--分布查询-->
+    <sql id="Base_Page_Query">
+        <if test="mo.page != null">
+            <choose>
+                <when test="mo.page.offset != null and mo.page.pageSize != null">
+
+                    <if test="_databaseId == 'mysql' or _databaseId == 'postgresql'">
+                        <include refid="Base_Query"/>
+                        <include refid="Base_Page_Order_By"/>
+                        limit #{mo.page.pageSize} offset #{mo.page.offset}
+                    </if>
+
+                    <if test="_databaseId == 'oracle'">
+                        SELECT offset_start.* FROM (
+                        SELECT rownum rn,offset_end.* FROM (
+
+                        <include refid="Base_Query"/>
+                        <include refid="Base_Page_Order_By"/>
+
+                        ) offset_end WHERE rownum <![CDATA[<=]]> (#{mo.page.offset}+#{mo.page.pageSize})
+                        ) offset_start WHERE offset_start.rn <![CDATA[>]]> #{mo.page.offset}
+                    </if>
+
+                </when>
+                <otherwise>
+                    <include refid="Base_Query"/>
+                    <include refid="Base_Page_Order_By"/>
+                </otherwise>
+            </choose>
+        </if>
+    </sql>
+
+</mapper>

@@ -5,8 +5,8 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    # 如果 druid 用不了，就注释掉
     type: com.alibaba.druid.pool.DruidDataSource
+#    type: com.zaxxer.hikari.HikariDataSource
     dynamic:
       # primary: pgsql-db #设置默认的数据源或者数据源组,默认值即为 master
       # strict: false #设置严格模式,默认false不启动. 启动后在未匹配到指定数据源时候会抛出异常,不启动则使用默认数据源. &dummyparam=
@@ -30,7 +30,6 @@ spring:
         #   password: password
         #   driver-class-name: oracle.jdbc.driver.OracleDriver
     # 如果 指定 hikari 数据库连接池
-    #type: com.zaxxer.hikari.HikariDataSource
     hikari:
       # 最大连接数
       maximum-pool-size: 10
@@ -50,6 +49,7 @@ spring:
       validation-timeout: 1000
       # 设置模式，例如 postgresql 有模式这个概念
       # schema:
+    # 如果 指定 druid 数据库连接池
     druid:
       # druid 监控页面入口控制
       stat-view-servlet:

@@ -2,7 +2,7 @@ taybct:
   file:
     # 是否启用
     enable: true
-    type: minio
+    type: local
     # 文件类型后缀配置
     file-content-type:
       "image/png": "png"

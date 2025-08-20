@@ -1,6 +1,6 @@
 # 应用版本号
 application:
-  version: 3.2.0
+  version: 3.2.3
 #服务器配置
 server:
   undertow:
@@ -15,7 +15,7 @@ server:
     direct-buffers: true
   compression:
     # 是否开启压缩 开了全局就不要开fegin的压缩请求 互斥
-    enabled: true
+    enabled: false
     # 配置支持压缩的 MIME TYPE
     mime-types: text/html,text/xml,text/plain,application/xml,application/json
   servlet:
@@ -53,6 +53,8 @@ spring:
 logging:
   file:
     name: logs/${spring.application.name}/info.log
+  level:
+    root: error
 #  level:
 #    io.github.mangocrisp.spring.taybct.auth: DEBUG
 #    org.springframework.security: DEBUG

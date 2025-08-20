@@ -6,7 +6,7 @@
     <parent>
         <artifactId>modules</artifactId>
         <groupId>io.github.mangocrisp</groupId>
-        <version>3.2.2</version>
+        <version>3.2.3</version>
     </parent>
 
     <artifactId>module-system</artifactId>
@@ -24,6 +24,11 @@
         <dependency>
             <groupId>io.github.mangocrisp</groupId>
             <artifactId>spring-taybct-module-system</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.mangocrisp</groupId>
+            <artifactId>api-system</artifactId>
         </dependency>
 
     </dependencies>

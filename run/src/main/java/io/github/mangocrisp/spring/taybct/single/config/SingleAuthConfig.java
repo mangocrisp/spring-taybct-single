@@ -2,7 +2,6 @@ package io.github.mangocrisp.spring.taybct.single.config;
 
 import cn.afterturn.easypoi.handler.inter.IExcelDictHandler;
 import io.github.mangocrisp.spring.taybct.auth.security.filter.CaptchaFilter;
-import io.github.mangocrisp.spring.taybct.auth.security.filter.LoginFilter;
 import io.github.mangocrisp.spring.taybct.auth.security.filter.PasswordCheckFilter;
 import io.github.mangocrisp.spring.taybct.auth.security.handle.IUserDetailsHandle;
 import io.github.mangocrisp.spring.taybct.auth.security.handle.PasswordExceptionReporter;
@@ -64,22 +63,6 @@ public class SingleAuthConfig {
         registrationBean.addUrlPatterns("/auth/oauth/login");
         registrationBean.setName("CaptchaFilter");
         registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);
-        return registrationBean;
-    }
-
-    /**
-     * 登录过滤器,过滤请求的时候加密的请求头信息,解密成正确的后放行
-     *
-     * @param keyPair 密钥对
-     * @return FilterRegistrationBean
-     */
-    @Bean
-    public FilterRegistrationBean<LoginFilter> loginFilter(KeyPair keyPair) {
-        FilterRegistrationBean<LoginFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new LoginFilter(keyPair));
-        registrationBean.addUrlPatterns("/auth/oauth/login");
-        registrationBean.setName("LoginFilter");
-        registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 2);
         return registrationBean;
     }
 
