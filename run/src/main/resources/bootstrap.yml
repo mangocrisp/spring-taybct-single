@@ -55,7 +55,7 @@ logging:
     name: logs/${spring.application.name}/info.log
   level:
     root: error
-#  level:
-#    io.github.mangocrisp.spring.taybct.auth: DEBUG
-#    org.springframework.security: DEBUG
-#    org.springframework.jdbc.core: DEBUG
+#    io.github.mangocrisp.spring.taybct.api.system.mapper: debug # mybatis sql
+#    io.github.mangocrisp.spring.taybct.auth: DEBUG # oauth2
+#    org.springframework.security: DEBUG # oauth2
+#    org.springframework.jdbc.core: DEBUG # oauth2

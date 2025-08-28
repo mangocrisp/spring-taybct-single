@@ -96,6 +96,8 @@ taybct:
         - "/es/**"
         # 字典
         - "/system/v1/params/cache/sys_title"
+        # WebSocket
+        - "/websocket/**"
       # 刷新令牌不需要验证码
       captcha-grant-type:
         - "refresh_token" # 刷新令牌不需要验证码
