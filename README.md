@@ -36,6 +36,20 @@ java.base/java.nio=ALL-UNNAMED
 java.base/sun.nio.ch=ALL-UNNAMED
 --add-opens
 java.base/java.lang.reflect=ALL-UNNAMED
+# 基础内存设置
+-Xms8g -Xmx8g
+-XX:MaxMetaspaceSize=512m
+# 使用ZGC
+-XX:+UseZGC
+-XX:MaxGCPauseMillis=150
+# 解决CodeCache问题
+-XX:ReservedCodeCacheSize=256m
+-XX:+UseCodeCacheFlushing
+# 日志与诊断
+-Xlog:gc*,gc+age=trace,safepoint:file=gc.log:time,uptime,level,tags:filecount=10,filesize=10M
+-XX:+HeapDumpOnOutOfMemoryError
+-XX:HeapDumpPath=./java_pid%p.hprof
+-XX:NativeMemoryTracking=detail
 ```
 
 3. 你可以在 modules 模块下看得到这些手动注册的

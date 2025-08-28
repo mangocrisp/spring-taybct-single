@@ -1,32 +1,40 @@
-#!/bin/bash
-# 清除之前运行的控制台输出日志
-echo "">$1.out
-# 指定jdk的 java 命令，你也可以指定对应的 jdk 版本
 java=env/linux/jdk-17.0.5/bin/java
-# 打包好后的jar包名，每个服务的 jar 包名不一样
 jar=$1
-echo "*****************尝试重启中*****************"
-# 先杀进程
-oldpid=`env/linux/jdk-17.0.5/bin/jps | grep $jar | grep -v "prep" | awk '{print $1}'`
-kill -9 $oldpid
-if [ "$?" -eq 0 ]; then
-    echo "kill 成功，pid：$oldpid"
+echo "" > $jar.out
+echo "*****************start begin*****************"
+oldpid=`jps | grep $jar | grep -v "prep" | awk '{print $1}'`
+if [ x"$oldpid" != x"" ]; then
+    echo "$jar was running..."
+    echo "try restart"
+    kill -9 $oldpid
+    echo "killed PID is $oldpid"
+    echo "run $jar ...."
 else
-    echo "kill 失败，没有找到对应的进程"
+    echo "run $jar ...."
 fi
-# 配置 VM 参数
-vm=-Dfile.encoding=utf-8 \
+vm="-Dfile.encoding=utf-8 \
 -Dmaven.wagon.http.ssl.insecure=true \
 -Dmaven.wagon.http.ssl.allowall=true \
 --add-opens java.base/java.util=ALL-UNNAMED \
 --add-opens java.base/java.lang=ALL-UNNAMED \
 --add-opens java.base/java.lang.reflect=ALL-UNNAMED \
 --add-opens java.base/java.lang.invoke=ALL-UNNAMED \
---add-opens java.base/java.lang.io=ALL-UNNAMED
-# 配置 Jar 包参数
-params=--spring.profiles.active=test
-echo "启动中：$jar"
-# 组合成启动命令，后台运行，并且把控制台日志输出到 run.jar.out 文件
-nohup $java $vm -jar $jar $params >$1.out 2>&1 &
+--add-opens java.base/java.lang.io=ALL-UNNAMED \
+-Xms8g -Xmx8g \
+-XX:MaxMetaspaceSize=512m \
+-XX:+UseZGC \
+-XX:MaxGCPauseMillis=150 \
+-XX:ReservedCodeCacheSize=256m \
+-XX:+UseCodeCacheFlushing \
+-Xlog:gc*,gc+age=trace,safepoint:file=gc.log:time,uptime,level,tags:filecount=10,filesize=10M \
+-XX:+HeapDumpOnOutOfMemoryError \
+-XX:HeapDumpPath=./java_pid%p.hprof \
+-XX:NativeMemoryTracking=detail"
+params="--spring.profiles.active=test \
+--spring.cloud.nacos.discovery.server-addr=68.52.2.141:8848 \
+--spring.cloud.nacos.config.server-addr=68.52.2.141:8848 \
+--spring.cloud.nacos.username=nacos \
+--spring.cloud.nacos.password=THga20_24_nacos"
+nohup $java $vm -jar $jar $params >$jar.out 2>&1 &
 nowpid=`jps | grep $jar | grep -v "prep" | awk '{print $1}'`
-echo "*****************启动成功，pid：$nowpid"*****************"
+echo "*****************start success,new PID is $nowpid*****************"
