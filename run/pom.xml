@@ -64,6 +64,12 @@
             <artifactId>module-system</artifactId>
         </dependency>
 
+        <!--流程管理-->
+        <dependency>
+            <groupId>io.github.mangocrisp</groupId>
+            <artifactId>module-lf</artifactId>
+        </dependency>
+
         <!--日志管理-->
         <dependency>
             <groupId>io.github.mangocrisp</groupId>

@@ -1,6 +1,7 @@
 package io.github.mangocrisp.spring.taybct.single;
 
 import io.github.mangocrisp.spring.taybct.tool.core.config.ApplicationConfig;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
@@ -21,6 +22,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @Import({ApplicationConfig.class})
 @SpringBootApplication
 @EnableCaching
+@MapperScan({"io.github.mangocrisp.spring.taybct.**.mapper"})
 public class RunApplication {
 
     public static void main(String[] args) {

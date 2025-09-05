@@ -98,6 +98,7 @@ taybct:
         - "/system/v1/params/cache/sys_title"
         # WebSocket
         - "/websocket/**"
+        - "/system/websocket/**"
       # 刷新令牌不需要验证码
       captcha-grant-type:
         - "refresh_token" # 刷新令牌不需要验证码
@@ -142,13 +143,13 @@ taybct:
     alias: rsa
     # 生成证书的时候配置的 密码
     password: taybct
-    expire-check: true
+    expire-check: false
     type:
       JWT:
         resource: jwt.jks
         alias: jwt
         password: taybct
-        expire-check: true
+        expire-check: false
   sm2:
     # resources 目录下的证书
     resource: sm2.jks
@@ -156,6 +157,7 @@ taybct:
     alias: sm2
     # 生成证书的时候配置的 密码
     password: taybct
+    expire-check: false
   datasource:
     # 数据源加密连接
     encrypted-connection:
