@@ -189,7 +189,7 @@ public class AuthServerConfigurer {
                                         .ifPresent(dto -> map.put(JwtTokenKeyConstants.USER_ID, dto.getUserId().toString()));
                             }
                             // 当然也是通过用户名认证的
-                            map.put(JwtTokenKeyConstants.AUTH_M, OAuthenticationMethodType.USERNAME.getValue());
+                            map.put(JwtTokenKeyConstants.AUTH_M, OAuthenticationMethodType.USERNAME.value());
                             map.put(JwtTokenKeyConstants.USERNAME, codeUser.getUsername());
                             map.put(JwtTokenKeyConstants.AUTHORITIES, codeUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
                         }
