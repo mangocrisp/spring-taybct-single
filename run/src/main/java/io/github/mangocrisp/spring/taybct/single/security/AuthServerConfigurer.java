@@ -300,6 +300,7 @@ public class AuthServerConfigurer {
             // 帮忙给前端设置好 jti
             Cookie jtiCookie = new Cookie(applicationName.toUpperCase() + "-" + TokenConstants.JWT_JTI.toUpperCase(), jti);
             jtiCookie.setPath(contextPath);
+            jtiCookie.setMaxAge(data.getInteger("access_token_exp"));
             response.addCookie(jtiCookie);
             return R.data(data);
         }
