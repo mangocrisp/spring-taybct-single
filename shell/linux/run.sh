@@ -30,11 +30,7 @@ vm="-Dfile.encoding=utf-8 \
 -XX:+HeapDumpOnOutOfMemoryError \
 -XX:HeapDumpPath=./java_pid%p.hprof \
 -XX:NativeMemoryTracking=detail"
-params="--spring.profiles.active=test \
---spring.cloud.nacos.discovery.server-addr=68.52.2.141:8848 \
---spring.cloud.nacos.config.server-addr=68.52.2.141:8848 \
---spring.cloud.nacos.username=nacos \
---spring.cloud.nacos.password=THga20_24_nacos"
+params="--spring.profiles.active=test"
 nohup $java $vm -jar $jar $params >$jar.out 2>&1 &
 nowpid=`jps | grep $jar | grep -v "prep" | awk '{print $1}'`
 echo "*****************start success,new PID is $nowpid*****************"
