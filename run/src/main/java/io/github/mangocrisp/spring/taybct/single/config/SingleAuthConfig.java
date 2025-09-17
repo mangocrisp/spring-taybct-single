@@ -128,7 +128,7 @@ public class SingleAuthConfig {
      * @param registeredClientRepository  注册
      * @return OAuth2AuthorizationService
      */
-    @Bean
+//    @Bean
     public OAuth2AuthorizationService authorizationService(JdbcTemplate jdbcTemplate
             , RegisteredClientRepository registeredClientRepository) {
         JdbcOAuth2AuthorizationService service = new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
