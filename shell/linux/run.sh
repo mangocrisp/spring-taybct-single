@@ -26,7 +26,7 @@ vm="-Dfile.encoding=utf-8 \
 -XX:MaxGCPauseMillis=150 \
 -XX:ReservedCodeCacheSize=256m \
 -XX:+UseCodeCacheFlushing \
--Xlog:gc*,gc+age=trace,safepoint:file=gc.log:time,uptime,level,tags:filecount=10,filesize=10M \
+-Xlog:gc*,gc+age=trace,safepoint:file=ac/gc.log:time,uptime,level,tags:filecount=10,filesize=10M \
 -XX:+HeapDumpOnOutOfMemoryError \
 -XX:HeapDumpPath=./java_pid%p.hprof \
 -XX:NativeMemoryTracking=detail"
