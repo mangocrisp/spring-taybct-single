@@ -57,6 +57,7 @@ logging:
     root: error
     io.github.mangocrisp.spring.taybct.module.lf.mapper: debug # mybatis sql
     io.github.mangocrisp.spring.taybct.api.system.mapper: debug # mybatis sql
+    io.github.mangocrisp.spring.taybct.module.od.mapper: debug # mybatis sql
 #    io.github.mangocrisp.spring.taybct.auth: DEBUG # oauth2
 #    org.springframework.security: DEBUG # oauth2
 #    org.springframework.jdbc.core: DEBUG # oauth2

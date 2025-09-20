@@ -187,6 +187,11 @@
             <artifactId>sqlite-jdbc</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.github.mangocrisp</groupId>
+            <artifactId>spring-taybct-module-online-doc</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

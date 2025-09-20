@@ -24,6 +24,8 @@ taybct:
       service-id: admin-log
     taybct-scheduling:
       context-path: "/scheduling/"
+    taybct-online-doc:
+      context-path: "/online-doc/"
   params:
     map:
       # 菜单默认的 Layout 的 id
@@ -68,6 +70,7 @@ taybct:
         - "/favicon.ico"
         # 文件
         - "/admin-file/statics/**"
+        - "/statics/**"
         # Monitor
         - "/assets/**"
         - "/variables.css"
@@ -99,6 +102,8 @@ taybct:
         # WebSocket
         - "/websocket/**"
         - "/system/websocket/**"
+        - "/online-doc/v1/onlineDoc/statics"
+        - "/online-doc/v1/onlineDoc/callback"
       # 刷新令牌不需要验证码
       captcha-grant-type:
         - "refresh_token" # 刷新令牌不需要验证码
