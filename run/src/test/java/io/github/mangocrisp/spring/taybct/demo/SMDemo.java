@@ -15,7 +15,7 @@ public class SMDemo {
 
     @SneakyThrows
     @Test
-    public void sm2Key(){
+    public void sm2Key() {
         SM2Coder.genSM2CACert("sm2", "taybct", 7776000
                 , certificateBuilder -> {
                 });
@@ -23,13 +23,13 @@ public class SMDemo {
 
     @SneakyThrows
     @Test
-    public void sm3Key(){
+    public void sm3Key() {
         SM3Coder.genSM3SecretKey();
     }
 
     @SneakyThrows
     @Test
-    public void sm4Key(){
+    public void sm4Key() {
         SM4Coder.genSM4SecretKey();
     }
 }

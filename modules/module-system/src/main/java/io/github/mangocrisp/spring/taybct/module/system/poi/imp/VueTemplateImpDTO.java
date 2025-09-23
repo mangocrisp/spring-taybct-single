@@ -1,28 +1,29 @@
 package io.github.mangocrisp.spring.taybct.module.system.poi.imp;
 
-import io.github.mangocrisp.spring.taybct.module.system.domain.VueTemplate;
-import io.github.mangocrisp.spring.taybct.tool.core.bean.ModelConvertible;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.*;
-import jakarta.validation.constraints.NotBlank;
-import io.github.mangocrisp.spring.taybct.tool.core.constant.DateConstants;
-import io.github.mangocrisp.spring.taybct.tool.core.exception.def.BaseException;
-import io.github.mangocrisp.spring.taybct.tool.core.util.BeanUtil;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.NotNull;
-import java.io.Serializable;
-
-import java.time.LocalDateTime;
-import java.time.LocalDate;
-import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import io.github.mangocrisp.spring.taybct.module.system.domain.VueTemplate;
+import io.github.mangocrisp.spring.taybct.tool.core.bean.ModelConvertible;
+import io.github.mangocrisp.spring.taybct.tool.core.constant.DateConstants;
+import io.github.mangocrisp.spring.taybct.tool.core.exception.def.BaseException;
+import io.github.mangocrisp.spring.taybct.tool.core.util.BeanUtil;
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
-import lombok.*;
+
 import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * <pre>
@@ -30,8 +31,8 @@ import java.io.Serial;
  * </pre>
  *
  * @author SuMuYue
- * @since 2025-08-15 11:12:11
  * @see VueTemplate
+ * @since 2025-08-15 11:12:11
  */
 @Data
 @EqualsAndHashCode
@@ -49,14 +50,14 @@ public class VueTemplateImpDTO implements Serializable, ModelConvertible<VueTemp
     /**
      * 创建人
      */
-    @NotNull(message="[创建人]不能为空")
+    @NotNull(message = "[创建人]不能为空")
     @ExcelProperty(value = "创建人")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long createUser;
     /**
      * 创建时间
      */
-    @NotNull(message="[创建时间]不能为空")
+    @NotNull(message = "[创建时间]不能为空")
     @ExcelProperty(value = "创建时间")
     @DateTimeFormat(pattern = DateConstants.format.YYYY_MM_DD_HH_mm_ss)
     @JsonFormat(pattern = DateConstants.format.YYYY_MM_DD_HH_mm_ss)
@@ -77,15 +78,15 @@ public class VueTemplateImpDTO implements Serializable, ModelConvertible<VueTemp
     /**
      * 是否已删除
      */
-    @NotNull(message="[是否已删除]不能为空")
+    @NotNull(message = "[是否已删除]不能为空")
     @ExcelProperty(value = "是否已删除")
     private Integer isDeleted;
     /**
      * 字符串类型
      */
-    @NotBlank(message="[字符串类型]不能为空")
-    @Size(max= 200,message="[字符串类型]长度不能超过200")
-    @Length(max= 200,message="[字符串类型]长度不能超过200")
+    @NotBlank(message = "[字符串类型]不能为空")
+    @Size(max = 200, message = "[字符串类型]长度不能超过200")
+    @Length(max = 200, message = "[字符串类型]长度不能超过200")
     @ExcelProperty(value = "字符串类型")
     private String string;
     /**

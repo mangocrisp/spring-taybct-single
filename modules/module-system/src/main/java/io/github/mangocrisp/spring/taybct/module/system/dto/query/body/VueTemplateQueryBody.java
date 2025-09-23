@@ -2,27 +2,18 @@ package io.github.mangocrisp.spring.taybct.module.system.dto.query.body;
 
 import io.github.mangocrisp.spring.taybct.module.system.domain.VueTemplate;
 import io.github.mangocrisp.spring.taybct.module.system.dto.query.dto.VueTemplateQueryDTO;
+import io.github.mangocrisp.spring.taybct.tool.core.bean.ModelConvertible;
 import io.github.mangocrisp.spring.taybct.tool.core.exception.def.BaseException;
 import io.github.mangocrisp.spring.taybct.tool.core.util.BeanUtil;
-import io.github.mangocrisp.spring.taybct.tool.core.constant.DateConstants;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.github.mangocrisp.spring.taybct.tool.core.bean.ModelConvertible;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.validator.constraints.Length;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
  * <pre>
@@ -31,8 +22,8 @@ import java.time.LocalDateTime;
  * </pre>
  *
  * @author SuMuYue
- * @since 2025-08-15 11:12:11
  * @see VueTemplate
+ * @since 2025-08-15 11:12:11
  */
 @Data
 @NoArgsConstructor

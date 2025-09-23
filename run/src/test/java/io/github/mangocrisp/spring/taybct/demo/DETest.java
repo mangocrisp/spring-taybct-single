@@ -1,10 +1,10 @@
 package io.github.mangocrisp.spring.taybct.demo;
 
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import io.github.mangocrisp.spring.taybct.single.RunApplication;
 import io.github.mangocrisp.spring.taybct.single.domain.EDDemo;
 import io.github.mangocrisp.spring.taybct.single.service.IEDDemoService;
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

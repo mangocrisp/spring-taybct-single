@@ -124,8 +124,9 @@ public class SingleAuthConfig {
 
     /**
      * 因为用到了 SQLite，类型转换会有问题，这里做一下类型解析器
-     * @param jdbcTemplate 数据源
-     * @param registeredClientRepository  注册
+     *
+     * @param jdbcTemplate               数据源
+     * @param registeredClientRepository 注册
      * @return OAuth2AuthorizationService
      */
 //    @Bean

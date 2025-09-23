@@ -1,9 +1,9 @@
 package io.github.mangocrisp.spring.taybct.single.config;
 
+import com.baomidou.mybatisplus.annotation.DbType;
 import io.github.mangocrisp.spring.taybct.tool.core.mybatis.handle.DeleteLogicExtraHandle;
 import io.github.mangocrisp.spring.taybct.tool.core.mybatis.interceptor.MyBatisExtraParamsInterceptor;
 import io.github.mangocrisp.spring.taybct.tool.core.mybatis.util.JDBCFieldUtil;
-import com.baomidou.mybatisplus.annotation.DbType;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
 

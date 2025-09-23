@@ -1,11 +1,12 @@
 package io.github.mangocrisp.spring.taybct.module.system.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.github.mangocrisp.spring.taybct.module.system.domain.VueTemplate;
 import io.github.mangocrisp.spring.taybct.tool.core.mybatis.constant.Constants;
 import io.github.mangocrisp.spring.taybct.tool.core.mybatis.util.MybatisOptional;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +16,8 @@ import java.util.Map;
  * </pre>
  *
  * @author SuMuYue
- * @since 2025-08-15 11:12:11
  * @see VueTemplate
+ * @since 2025-08-15 11:12:11
  */
 public interface VueTemplateMapper extends BaseMapper<VueTemplate> {
 

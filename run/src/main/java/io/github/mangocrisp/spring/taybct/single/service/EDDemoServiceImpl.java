@@ -6,7 +6,6 @@ import io.github.mangocrisp.spring.taybct.tool.core.annotation.EnhanceElement;
 import io.github.mangocrisp.spring.taybct.tool.core.annotation.EnhanceElementMap;
 import io.github.mangocrisp.spring.taybct.tool.core.annotation.EnhanceElements;
 import io.github.mangocrisp.spring.taybct.tool.core.annotation.EnhanceMethod;
-import io.github.mangocrisp.spring.taybct.single.handle.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -92,7 +91,7 @@ public class EDDemoServiceImpl implements IEDDemoService {
                     , parameterHandler = {EnFunction2.class, EnFunction2.class}
             )
             , parameterHandler = {EnFunction.class, EnFunction.class}
-            , map = {@EnhanceElementMap("k1"),@EnhanceElementMap(value = {"k2", "k3"}, resultHandler = {DeFunction2.class, DeFunction2.class}),}
+            , map = {@EnhanceElementMap("k1"), @EnhanceElementMap(value = {"k2", "k3"}, resultHandler = {DeFunction2.class, DeFunction2.class}),}
             , resultHandler = {DeFunction2.class, DeFunction2.class})
     public Map<String, String> edMapStr(Map<String, String> map) {
         log.info("进方法后:");

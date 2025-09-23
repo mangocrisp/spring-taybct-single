@@ -22,7 +22,7 @@ public class TestNoAuthAccess {
 
     @SneakyThrows
     @Test
-    public void test1(){
+    public void test1() {
         String jsonStr = """
                 {
                     "uid":"1",

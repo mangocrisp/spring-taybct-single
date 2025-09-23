@@ -1,10 +1,10 @@
 package io.github.mangocrisp.spring.taybct.single.config;
 
+import cn.hutool.core.collection.CollectionUtil;
 import io.github.mangocrisp.spring.taybct.tool.core.exception.handler.IGlobalExceptionReporter;
 import io.github.mangocrisp.spring.taybct.tool.core.exception.handler.IGlobalPrinter;
 import io.github.mangocrisp.spring.taybct.tool.core.result.R;
 import io.github.mangocrisp.spring.taybct.tool.core.result.ResultCode;
-import cn.hutool.core.collection.CollectionUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
