@@ -148,13 +148,13 @@ taybct:
     alias: rsa
     # 生成证书的时候配置的 密码
     password: taybct
-    expire-check: false
+    expire-check: true
     type:
       JWT:
         resource: jwt.jks
         alias: jwt
         password: taybct
-        expire-check: false
+        expire-check: true
   sm2:
     # resources 目录下的证书
     resource: sm2.jks
@@ -162,7 +162,7 @@ taybct:
     alias: sm2
     # 生成证书的时候配置的 密码
     password: taybct
-    expire-check: false
+    expire-check: true
   datasource:
     # 数据源加密连接
     encrypted-connection:
