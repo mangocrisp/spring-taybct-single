@@ -46,7 +46,7 @@ java.base/java.lang.reflect=ALL-UNNAMED
 -XX:ReservedCodeCacheSize=256m
 -XX:+UseCodeCacheFlushing
 # 日志与诊断
--Xlog:gc*,gc+age=trace,safepoint:file=gc.log:time,uptime,level,tags:filecount=10,filesize=10M
+-Xlog:gc*,gc+age=trace,safepoint:file=ac/gc.log:time,uptime,level,tags:filecount=10,filesize=10M
 -XX:+HeapDumpOnOutOfMemoryError
 -XX:HeapDumpPath=./java_pid%p.hprof
 -XX:NativeMemoryTracking=detail
