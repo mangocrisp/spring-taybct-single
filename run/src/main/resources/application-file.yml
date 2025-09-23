@@ -19,7 +19,7 @@ taybct:
       # 上传文件名长度限制
       upload-file-name-length: 100
       # 允许上传的文件类型，不配置表示允许所有
-      upload-allowed-extensions: png,jpg,jpeg,gif,pdf,doc,docx,xls,xlsx,ppt,pptx,zip,rar,7z,txt,md,html,htm,css,js,java,c,cpp,h,py,sh,bat,exe,mp3,mp4,wmv,avi,mov,flv,m3u8,ts,mkv,webm,wav,ogg,wma,aac,amr,mpg,mpeg,m4a,m4v,m4p,m4r,m4b,m4e,m4o,m4s,m4l,m
+      upload-allowed-extensions: png,jpg,jpeg,gif,pdf,ppt,doc,docx,xls,xlsx,doc,pptx,xlsm,mp3,voc,mp4,avi,wav,zip
       # 指定默认文件服务器类型 local：本地 oss：阿里云对象存储 fdfs：FastDFS 文件存储 minio：MinIO 对象存储
     oss:
       endpoint: oss-cn-shenzhen.aliyuncs.com
