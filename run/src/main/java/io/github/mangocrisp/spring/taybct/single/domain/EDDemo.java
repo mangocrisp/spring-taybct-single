@@ -1,13 +1,13 @@
 package io.github.mangocrisp.spring.taybct.single.domain;
 
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import io.github.mangocrisp.spring.taybct.single.handle.DeFunction;
 import io.github.mangocrisp.spring.taybct.single.handle.EnFunction;
 import io.github.mangocrisp.spring.taybct.tool.core.annotation.EnhanceElement;
 import io.github.mangocrisp.spring.taybct.tool.core.annotation.EnhanceElementIgnore;
 import io.github.mangocrisp.spring.taybct.tool.core.annotation.EnhanceElementMap;
 import io.github.mangocrisp.spring.taybct.tool.core.annotation.EnhanceElements;
-import com.alibaba.fastjson2.JSONArray;
-import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;
 import lombok.ToString;
 

@@ -1,31 +1,27 @@
 package io.github.mangocrisp.spring.taybct.module.system.domain;
 
+import cn.afterturn.easypoi.entity.PoiBaseConstants;
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import cn.afterturn.easypoi.excel.annotation.ExcelTarget;
-import cn.afterturn.easypoi.entity.PoiBaseConstants;
-import io.github.mangocrisp.spring.taybct.tool.core.annotation.TableFieldJSON;
-import io.github.mangocrisp.spring.taybct.tool.core.bean.DeleteLogicEntity;
-import io.github.mangocrisp.spring.taybct.tool.core.support.ToJSONObjectSerializer;
-import jakarta.validation.constraints.NotBlank;
-import io.github.mangocrisp.spring.taybct.tool.core.constant.DateConstants;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.NotNull;
-import java.io.Serializable;
-
-import java.time.LocalDateTime;
-import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.springframework.format.annotation.DateTimeFormat;
+import io.github.mangocrisp.spring.taybct.tool.core.annotation.TableFieldJSON;
+import io.github.mangocrisp.spring.taybct.tool.core.bean.DeleteLogicEntity;
+import io.github.mangocrisp.spring.taybct.tool.core.constant.DateConstants;
+import io.github.mangocrisp.spring.taybct.tool.core.support.ToJSONObjectSerializer;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serial;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * <pre>
@@ -56,9 +52,9 @@ public class VueTemplate extends DeleteLogicEntity<Long, Long> {
     /**
      * 字符串类型
      */
-    @NotBlank(message="[字符串类型]不能为空")
-    @Size(max= 200,message="[字符串类型]长度不能超过200")
-    @Length(max= 200,message="[字符串类型]长度不能超过200")
+    @NotBlank(message = "[字符串类型]不能为空")
+    @Size(max = 200, message = "[字符串类型]长度不能超过200")
+    @Length(max = 200, message = "[字符串类型]长度不能超过200")
     @Schema(description = "字符串类型")
     @Excel(name = "字符串类型", width = 25, needMerge = true, mergeVertical = true)
     @TableField(value = "string")

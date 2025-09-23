@@ -119,7 +119,7 @@ public class VueTemplateController implements LongKeyConvertibleController<VueTe
     @DeleteMapping("/{id}")
     @ApiLog(title = "根据 id 删除记录", description = "根据 id 删除【前端通用模板】", type = OperateType.DELETE)
     @Parameters({
-        @Parameter(name = "id", description = "主键 id", required = true, in = ParameterIn.PATH)
+            @Parameter(name = "id", description = "主键 id", required = true, in = ParameterIn.PATH)
     })
     public R<? extends VueTemplate> delete(@PathVariable Long id) {
         return LongKeyConvertibleController.super.delete(id);
@@ -163,7 +163,7 @@ public class VueTemplateController implements LongKeyConvertibleController<VueTe
     @Operation(summary = "查看详情")
     @Override
     @Parameters({
-        @Parameter(name = "id", description = "主键 id", required = true, in = ParameterIn.PATH)
+            @Parameter(name = "id", description = "主键 id", required = true, in = ParameterIn.PATH)
     })
     public R<VueTemplate> detail(@PathVariable Long id) {
         return R.data(getBaseService().detail(JSONObject.of("id", id)));

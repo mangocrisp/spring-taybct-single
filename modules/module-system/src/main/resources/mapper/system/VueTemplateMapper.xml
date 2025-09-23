@@ -5,27 +5,28 @@
 <mapper namespace="io.github.mangocrisp.spring.taybct.module.system.mapper.VueTemplateMapper">
 
     <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.module.system.domain.VueTemplate">
-            <id property="id" column="t_vue_template_id" jdbcType="BIGINT"/>
-            <result property="createUser" column="t_vue_template_create_user" jdbcType="BIGINT"/>
-            <result property="createTime" column="t_vue_template_create_time" jdbcType="TIMESTAMP"/>
-            <result property="updateUser" column="t_vue_template_update_user" jdbcType="BIGINT"/>
-            <result property="updateTime" column="t_vue_template_update_time" jdbcType="TIMESTAMP"/>
-            <result property="isDeleted" column="t_vue_template_is_deleted" jdbcType="SMALLINT"/>
-            <result property="string" column="t_vue_template_string" jdbcType="VARCHAR"/>
-            <result property="numberInt" column="t_vue_template_number_int" jdbcType="INTEGER"/>
-            <result property="numberLong" column="t_vue_template_number_long" jdbcType="BIGINT"/>
-            <result property="date" column="t_vue_template_date" jdbcType="DATE"/>
-            <result property="dateTime" column="t_vue_template_date_time" jdbcType="TIMESTAMP"/>
-            <result property="numberByte" column="t_vue_template_number_byte" jdbcType="SMALLINT"/>
-            <result property="boolType" column="t_vue_template_bool_type" jdbcType="BOOLEAN"/>
-            <result property="textType" column="t_vue_template_text_type" jdbcType="VARCHAR"/>
-            <result property="jsonType" column="t_vue_template_json_type" jdbcType="OTHER"/>
-            <result property="floatType" column="t_vue_template_float_type" jdbcType="REAL"/>
-            <result property="doubleType" column="t_vue_template_double_type" jdbcType="DOUBLE"/>
+        <id property="id" column="t_vue_template_id" jdbcType="BIGINT"/>
+        <result property="createUser" column="t_vue_template_create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="t_vue_template_create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="t_vue_template_update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="t_vue_template_update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="t_vue_template_is_deleted" jdbcType="SMALLINT"/>
+        <result property="string" column="t_vue_template_string" jdbcType="VARCHAR"/>
+        <result property="numberInt" column="t_vue_template_number_int" jdbcType="INTEGER"/>
+        <result property="numberLong" column="t_vue_template_number_long" jdbcType="BIGINT"/>
+        <result property="date" column="t_vue_template_date" jdbcType="DATE"/>
+        <result property="dateTime" column="t_vue_template_date_time" jdbcType="TIMESTAMP"/>
+        <result property="numberByte" column="t_vue_template_number_byte" jdbcType="SMALLINT"/>
+        <result property="boolType" column="t_vue_template_bool_type" jdbcType="BOOLEAN"/>
+        <result property="textType" column="t_vue_template_text_type" jdbcType="VARCHAR"/>
+        <result property="jsonType" column="t_vue_template_json_type" jdbcType="OTHER"/>
+        <result property="floatType" column="t_vue_template_float_type" jdbcType="REAL"/>
+        <result property="doubleType" column="t_vue_template_double_type" jdbcType="DOUBLE"/>
     </resultMap>
 
     <!--分页返回结果-->
-    <resultMap id="BasePageResultMap" type="io.github.mangocrisp.spring.taybct.module.system.domain.VueTemplate" extends="BaseResultMap">
+    <resultMap id="BasePageResultMap" type="io.github.mangocrisp.spring.taybct.module.system.domain.VueTemplate"
+               extends="BaseResultMap">
         <!--这里返回的是可扩展的返回结果 vo 之类的-->
         <!--<collection property="实体类里面的属性" javaType="返回的集合是什么集合的类型如：java.util.List" resultMap="指定映射集合类元素的类型的 resultMap"/>-->
         <!--<association property="实体类里面的属性" column="关联的另一张表的主键" javaType="另一张表对应的实体类" resultMap="指定映射属性对应对象的 resultMap"/>-->
@@ -36,7 +37,10 @@
 
     <!--列名-->
     <sql id="Base_Column_List">
-        t_vue_template.id as t_vue_template_id,t_vue_template.create_user as t_vue_template_create_user,t_vue_template.create_time as t_vue_template_create_time,
+        t_vue_template
+        .
+        id
+        as t_vue_template_id,t_vue_template.create_user as t_vue_template_create_user,t_vue_template.create_time as t_vue_template_create_time,
         t_vue_template.update_user as t_vue_template_update_user,t_vue_template.update_time as t_vue_template_update_time,t_vue_template.is_deleted as t_vue_template_is_deleted,
         t_vue_template.string as t_vue_template_string,t_vue_template.number_int as t_vue_template_number_int,t_vue_template.number_long as t_vue_template_number_long,
         t_vue_template.date as t_vue_template_date,t_vue_template.date_time as t_vue_template_date_time,t_vue_template.number_byte as t_vue_template_number_byte,
@@ -57,15 +61,16 @@
             </otherwise>
         </choose>
         from (
-            select s.*
-            from (
-            <include refid="page_sql"/>
-            ) s
+        select s.*
+        from (
+        <include refid="page_sql"/>
+        ) s
         ) temp
     </select>
 
     <update id="updateBatchByCondition">
-        update <include refid="Base_Table_Name"/>
+        update
+        <include refid="Base_Table_Name"/>
         <set>
             <if test="mo.bean.createUser != null">
                 ,create_user = #{mo.bean.createUser,jdbcType=BIGINT}
@@ -123,7 +128,7 @@
             </if>
             <!--当前表的查询条件-->
             <if test="mo.params.vueTemplateQueryDTO != null">
-            <include refid="DTO_Condition"/>
+                <include refid="DTO_Condition"/>
             </if>
             <!--TODO 继续添加查询条件-->
         </where>
@@ -132,7 +137,7 @@
     <!--查询总数-->
     <select id="total" resultType="java.lang.Long">
         select count(1) from (
-            <include refid="Base_Query"/>
+        <include refid="Base_Query"/>
         ) temp
     </select>
 
@@ -140,10 +145,11 @@
     <sql id="page_sql">
         select t.*
         from (
-            <include refid="Base_Page_Query"/>
+        <include refid="Base_Page_Query"/>
         ) t
         <if test="mo.page != null and mo.page.sort != null">
-        order by <foreach collection="mo.page.sort" item="item" separator=","> t.t_vue_template_${item}</foreach>
+            order by
+            <foreach collection="mo.page.sort" item="item" separator=",">t.t_vue_template_${item}</foreach>
         </if>
     </sql>
     <!--查询分页-->
@@ -168,7 +174,7 @@
     <sql id="detail_sql">
         select t.*
         from (
-            <include refid="Base_Query"/>
+        <include refid="Base_Query"/>
         ) t
     </sql>
     <!--查询详情-->
@@ -191,8 +197,10 @@
 
     <!--基础查询-->
     <sql id="Base_Query">
-        select <include refid="Base_Column_List"/>
-        from <include refid="Base_Table_Name"/>
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="Base_Table_Name"/>
         <include refid="Base_Condition"/>
     </sql>
 
@@ -292,7 +300,7 @@
         <where>
             <if test="mo.conditions != null and mo.conditions.basic != null">
                 and (
-                    ${mo.conditions.basic}
+                ${mo.conditions.basic}
                 )
             </if>
             <!--主键-->
@@ -301,7 +309,7 @@
             </if>
             <!--当前表的查询条件-->
             <if test="mo.params.vueTemplateQueryDTO != null">
-            <include refid="DTO_Condition"/>
+                <include refid="DTO_Condition"/>
             </if>
             <!--TODO 继续添加查询条件-->
         </where>
@@ -309,7 +317,8 @@
 
     <sql id="Base_Page_Order_By">
         <if test="mo.page != null and mo.page.sort != null">
-        order by <foreach collection="mo.page.sort" item="item" separator=","> t_vue_template.${item}</foreach>
+            order by
+            <foreach collection="mo.page.sort" item="item" separator=",">t_vue_template.${item}</foreach>
         </if>
     </sql>
 

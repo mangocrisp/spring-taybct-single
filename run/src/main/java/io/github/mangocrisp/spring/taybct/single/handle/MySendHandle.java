@@ -38,17 +38,17 @@ public class MySendHandle implements IMessageSendService {
 
     @Override
     public void send(Message message) {
-        cachedThreadPool.execute(()->{
+        cachedThreadPool.execute(() -> {
             // TODO，这里根据消息的类型来做对应的处理
             // 日志管理模块，自己就是管理模块，所以这里直接就写库了
-            if(message instanceof ApiLogDTO) {
+            if (message instanceof ApiLogDTO) {
                 ApiLog apiLog = JSONObject.parseObject(message.getPayload(), ApiLog.class);
                 apiLogService.save(apiLog);
             }
-            if(message instanceof ScheduledLogDTO) {
+            if (message instanceof ScheduledLogDTO) {
                 scheduledLogService.logRecorder(JSONObject.parseObject(message.getPayload()));
             }
-            if(message instanceof FileSendDTO) {
+            if (message instanceof FileSendDTO) {
                 sysFileService.link(JSONArray.parseArray(message.getPayload()).toJavaList(SysFile.class));
             }
         });

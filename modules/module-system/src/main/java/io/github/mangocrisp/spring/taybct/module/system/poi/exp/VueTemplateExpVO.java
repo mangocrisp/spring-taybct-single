@@ -3,25 +3,18 @@ package io.github.mangocrisp.spring.taybct.module.system.poi.exp;
 import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.*;
-import jakarta.validation.constraints.NotBlank;
-import io.github.mangocrisp.spring.taybct.tool.core.constant.DateConstants;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.NotNull;
-import java.io.Serializable;
-
-import java.time.LocalDateTime;
-import java.time.LocalDate;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import io.github.mangocrisp.spring.taybct.tool.core.constant.DateConstants;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.format.annotation.DateTimeFormat;
-import lombok.*;
+
 import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * <pre>
@@ -29,8 +22,8 @@ import java.io.Serial;
  * </pre>
  *
  * @author SuMuYue
- * @since 2025-08-15 11:12:11
  * @see io.github.mangocrisp.spring.taybct.module.system.domain.VueTemplate
+ * @since 2025-08-15 11:12:11
  */
 @Data
 @EqualsAndHashCode

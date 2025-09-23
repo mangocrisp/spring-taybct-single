@@ -1,9 +1,8 @@
 package io.github.mangocrisp.spring.taybct.single.controller;
 
+import com.alibaba.fastjson2.JSONObject;
 import io.github.mangocrisp.spring.taybct.tool.core.bean.ISecurityUtil;
 import io.github.mangocrisp.spring.taybct.tool.core.result.R;
-import io.github.mangocrisp.spring.taybct.tool.security.util.SecurityUtil;
-import com.alibaba.fastjson2.JSONObject;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

@@ -25,9 +25,9 @@ public class GenKeys {
     public void jwtKey() {
         X500Name build = RSACoder.createStdBuilder().build();
         RSACoder.genRSACACert("jwt", "taybct", build, build, 7776000, certificateBuilder -> {
-        }, new String[]{RSACoder.CER_PATH + RSACoder.PRIVATE_KEY_NAME.replace("rsa","jwt")
-                , RSACoder.CER_PATH + RSACoder.CER_NAME.replace("rsa","jwt")
-                , RSACoder.CER_PATH + RSACoder.KEY_STORE_NAME.replace("rsa","jwt")});
+        }, new String[]{RSACoder.CER_PATH + RSACoder.PRIVATE_KEY_NAME.replace("rsa", "jwt")
+                , RSACoder.CER_PATH + RSACoder.CER_NAME.replace("rsa", "jwt")
+                , RSACoder.CER_PATH + RSACoder.KEY_STORE_NAME.replace("rsa", "jwt")});
     }
 
     @SneakyThrows
@@ -42,9 +42,9 @@ public class GenKeys {
     public void rsaKeyLimited() {
         X500Name build = RSACoder.createStdBuilder().build();
         RSACoder.genRSACACert("limited", "taybct", build, build, 7776000, certificateBuilder -> {
-        }, new String[]{RSACoder.CER_PATH + RSACoder.PRIVATE_KEY_NAME.replace("rsa","limited")
-                , RSACoder.CER_PATH + RSACoder.CER_NAME.replace("rsa","limited")
-                , RSACoder.CER_PATH + RSACoder.KEY_STORE_NAME.replace("rsa","limited")});
+        }, new String[]{RSACoder.CER_PATH + RSACoder.PRIVATE_KEY_NAME.replace("rsa", "limited")
+                , RSACoder.CER_PATH + RSACoder.CER_NAME.replace("rsa", "limited")
+                , RSACoder.CER_PATH + RSACoder.KEY_STORE_NAME.replace("rsa", "limited")});
     }
 
     @SneakyThrows
@@ -67,7 +67,7 @@ public class GenKeys {
     }
 
     @Test
-    public void all(){
+    public void all() {
         jwtKey();
         rsaKey();
         rsaKeyLimited();

@@ -1,10 +1,10 @@
 package io.github.mangocrisp.spring.taybct.demo;
 
+import cn.hutool.crypto.digest.MD5;
 import io.github.mangocrisp.spring.taybct.api.system.domain.SysOauth2Client;
 import io.github.mangocrisp.spring.taybct.common.constants.HeaderConstants;
 import io.github.mangocrisp.spring.taybct.single.RunApplication;
 import io.github.mangocrisp.spring.taybct.tool.core.constant.AuthHeaderConstants;
-import cn.hutool.crypto.digest.MD5;
 import jakarta.annotation.Resource;
 import org.junit.Test;
 import org.junit.runner.RunWith;

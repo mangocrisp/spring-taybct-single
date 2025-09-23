@@ -1,19 +1,22 @@
 package io.github.mangocrisp.spring.taybct.module.system.dto.update;
 
-import io.github.mangocrisp.spring.taybct.module.system.domain.VueTemplate;
-import io.github.mangocrisp.spring.taybct.tool.core.exception.def.BaseException;
-import io.github.mangocrisp.spring.taybct.tool.core.util.BeanUtil;
-import io.github.mangocrisp.spring.taybct.tool.core.constant.DateConstants;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.github.mangocrisp.spring.taybct.tool.core.bean.ModelConvertible;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import io.github.mangocrisp.spring.taybct.module.system.domain.VueTemplate;
+import io.github.mangocrisp.spring.taybct.tool.core.bean.ModelConvertible;
+import io.github.mangocrisp.spring.taybct.tool.core.constant.DateConstants;
+import io.github.mangocrisp.spring.taybct.tool.core.exception.def.BaseException;
+import io.github.mangocrisp.spring.taybct.tool.core.util.BeanUtil;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,8 +33,8 @@ import java.time.LocalDateTime;
  * </pre>
  *
  * @author SuMuYue
- * @since 2025-08-15 11:12:11
  * @see VueTemplate
+ * @since 2025-08-15 11:12:11
  */
 @Data
 @Accessors(chain = true)
@@ -47,7 +50,7 @@ public class VueTemplateUpdateDTO implements Serializable, ModelConvertible<VueT
     /**
      * 主键
      */
-    @NotNull(message="[主键]不能为空")
+    @NotNull(message = "[主键]不能为空")
     @Schema(description = "主键")
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
@@ -60,9 +63,9 @@ public class VueTemplateUpdateDTO implements Serializable, ModelConvertible<VueT
     /**
      * 字符串类型
      */
-    @NotBlank(message="[字符串类型]不能为空")
-    @Size(max= 200,message="[字符串类型]长度不能超过200")
-    @Length(max= 200,message="[字符串类型]长度不能超过200")
+    @NotBlank(message = "[字符串类型]不能为空")
+    @Size(max = 200, message = "[字符串类型]长度不能超过200")
+    @Length(max = 200, message = "[字符串类型]长度不能超过200")
     @Schema(description = "字符串类型")
     private String string;
     /**

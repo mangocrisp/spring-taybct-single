@@ -8,6 +8,6 @@ import java.util.function.Function;
 public class EnFunction implements Function<Object, Object> {
     @Override
     public Object apply(Object s) {
-        return ((String)s).replace("解密", "") + "加密";
+        return ((String) s).replace("解密", "") + "加密";
     }
 }

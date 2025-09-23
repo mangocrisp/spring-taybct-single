@@ -1,5 +1,9 @@
 package io.github.mangocrisp.spring.taybct.single.security;
 
+import cn.hutool.core.lang.UUID;
+import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTUtil;
+import com.alibaba.fastjson2.JSONObject;
 import io.github.mangocrisp.spring.taybct.api.system.mapper.SysUserMapper;
 import io.github.mangocrisp.spring.taybct.api.system.mapper.SysUserRoleMapper;
 import io.github.mangocrisp.spring.taybct.auth.security.granter.DefaultCustomizeTokenEndpointConfigurer;
@@ -24,10 +28,6 @@ import io.github.mangocrisp.spring.taybct.tool.core.exception.def.BaseException;
 import io.github.mangocrisp.spring.taybct.tool.core.result.R;
 import io.github.mangocrisp.spring.taybct.tool.core.support.IEncryptedPassable;
 import io.github.mangocrisp.spring.taybct.tool.pki.prop.PKIProp;
-import cn.hutool.core.lang.UUID;
-import cn.hutool.jwt.JWT;
-import cn.hutool.jwt.JWTUtil;
-import com.alibaba.fastjson2.JSONObject;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
@@ -109,9 +109,9 @@ public class AuthServerConfigurer {
                 , pkiProp
                 , redisTemplate
                 , idCard -> {
-                    // 这里需要提供一个根据身份证查询用户的返回结果
-                    throw new BaseException("未找到用户");
-                });
+            // 这里需要提供一个根据身份证查询用户的返回结果
+            throw new BaseException("未找到用户");
+        });
     }
 
     /**
