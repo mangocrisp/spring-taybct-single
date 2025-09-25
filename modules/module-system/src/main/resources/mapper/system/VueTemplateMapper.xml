@@ -328,13 +328,13 @@
             <choose>
                 <when test="mo.page.offset != null and mo.page.pageSize != null">
 
-                    <if test="_databaseId == 'mysql' or _databaseId == 'postgresql'">
+                    <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
                         <include refid="Base_Query"/>
                         <include refid="Base_Page_Order_By"/>
                         limit #{mo.page.pageSize} offset #{mo.page.offset}
                     </if>
 
-                    <if test="_databaseId == 'oracle'">
+                    <if test="_db_type_db_ == 'oracle'">
                         SELECT offset_start.* FROM (
                         SELECT rownum rn,offset_end.* FROM (
 
