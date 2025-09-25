@@ -11,30 +11,40 @@ taybct:
         description: "清理权限脏数据"
         auto-start: 1
         sort: 0
+        params:
+          "tenantId": "000000"
       clearExpires:
         task-key: clearExpires
         cron: 0 0/1 * * * ?
         description: "清理登录超时用户"
         auto-start: 1
         sort: 1
+        params:
+          "tenantId": "000000"
       iniPermissionConfig:
         task-key: iniPermissionConfig
         cron: 0 0/1 * * * ?
         description: "初始化权限配置"
         auto-start: 1
         sort: 2
+        params:
+          "tenantId": "000000"
       iniParams:
         task-key: iniParams
         cron: 0 0/1 * * * ?
         description: "初始化参数配置"
         auto-start: 1
         sort: 0
+        params:
+          "tenantId": "000000"
       clearAuthCache:
         task-key: clearAuthCache
         cron: 0 0/1 * * * ?
         description: "清理登录超时用户"
         auto-start: 1
         sort: 1
+        params:
+          "tenantId": "000000"
       cleanNotLinkedFile:
         task-key: cleanNotLinkedFile
         # 每天 0 点清理无效文件
@@ -43,5 +53,6 @@ taybct:
         auto-start: 1
         sort: 1
         params:
+          "tenantId": "000000"
           # 每次查询清理的条数，分页大小
           "limit": 999
