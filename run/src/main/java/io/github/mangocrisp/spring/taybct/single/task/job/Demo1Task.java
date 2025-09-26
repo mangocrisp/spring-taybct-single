@@ -2,6 +2,7 @@ package io.github.mangocrisp.spring.taybct.single.task.job;
 
 import com.alibaba.fastjson2.JSONObject;
 import io.github.mangocrisp.spring.taybct.module.scheduling.service.IScheduledLogService;
+import io.github.mangocrisp.spring.taybct.module.system.service.ISysNoticeService;
 import io.github.mangocrisp.spring.taybct.tool.core.annotation.Scheduler;
 import io.github.mangocrisp.spring.taybct.tool.scheduling.job.AbstractScheduledTaskJob;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +21,12 @@ import java.util.function.Consumer;
 @AutoConfiguration
 @RequiredArgsConstructor
 @Slf4j
-@Scheduler("demo")
-public class DemoTask extends AbstractScheduledTaskJob {
+@Scheduler("demo1")
+public class Demo1Task extends AbstractScheduledTaskJob {
 
     final IScheduledLogService scheduledLogService;
+
+    final ISysNoticeService sysNoticeService;
 
     @Override
     protected Consumer<JSONObject> getLogRecorder() {
@@ -35,6 +38,8 @@ public class DemoTask extends AbstractScheduledTaskJob {
         log.info("demo task => 当前线程名称 {} ", Thread.currentThread().getName());
         params.forEach((k, v) -> log.info("{} >>>> {}", k, v));
         log.info(">>>>>> 测试任务开始 >>>>>> ");
+
+        sysNoticeService.sendCurrentUserMessage("发送消息："+ params.get("message"));
 //        stopRecord(OperateStatus.SUCCESS.getCode(), "我自己记录一个消息");
 //        throw new RuntimeException("最后个报错");
     }
