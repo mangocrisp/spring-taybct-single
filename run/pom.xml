@@ -99,12 +99,6 @@
         <dependency>
             <groupId>io.github.mangocrisp</groupId>
             <artifactId>admin-file</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>bcprov-jdk15on</artifactId>
-                    <groupId>org.bouncycastle</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!--短信-->
