@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.api.system.mapper.SysNoticeMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.api.system.domain.SysNotice">
+        <id property="id" column="sn_id" jdbcType="BIGINT"/>
+        <result property="createUser" column="sn_create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="sn_create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="sn_update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="sn_update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="sn_is_deleted" jdbcType="TINYINT"/>
+        <result property="title" column="sn_title" jdbcType="VARCHAR"/>
+        <result property="message" column="sn_message" jdbcType="VARCHAR"/>
+        <result property="level" column="sn_level" jdbcType="VARCHAR"/>
+        <result property="positive" column="sn_positive" jdbcType="TINYINT"/>
+        <result property="data" column="sn_data" jdbcType="OTHER"/>
+        <result property="topic" column="sn_topic" jdbcType="VARCHAR"/>
+        <result property="subType" column="sn_sub_type" jdbcType="VARCHAR"/>
+        <result property="fromUser" column="sn_from_user" jdbcType="BIGINT"/>
+        <result property="fromUserName" column="sn_from_user_name" jdbcType="VARCHAR"/>
+        <result property="fromUserAvatar" column="sn_from_user_avatar" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="VOResultMap" type="io.github.mangocrisp.spring.taybct.api.system.vo.SysNoticeVO"
+               extends="BaseResultMap">
+        <result property="status" column="nu_status" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,create_user,create_time,
+        update_user,update_time,is_deleted,
+        title,message,
+        level,positive,data,
+        topic,sub_type,from_user,from_user_name,
+        from_user_avatar
+    </sql>
+
+    <sql id="related_condition">
+        <if test="relatedCondition != null and relatedCondition.size()>0">
+            <foreach collection="relatedCondition.keys" item="k" index="index" open=" and case " close=" end ">
+                <if test="null != relatedCondition[k] and relatedCondition[k]!=''">
+                    when snu.notice_type = #{k}
+                    <choose>
+                        <when test="_db_type_db_ == 'postgresql'">
+                            then snu.related_id = CAST(#{relatedCondition.${k}} AS BIGINT)
+                        </when>
+                        <otherwise>
+                            then snu.related_id = #{relatedCondition.${k}}
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="base_query">
+        select
+        sn.id sn_id
+        ,sn.create_user sn_create_user
+        ,sn.create_time sn_create_time
+        ,sn.update_user sn_update_user
+        ,sn.update_time sn_update_time
+        ,sn.is_deleted sn_is_deleted
+        ,sn.title sn_title
+        ,sn.message sn_message
+        ,sn.level sn_level
+        ,sn.positive sn_positive
+        ,sn.data sn_data
+        ,sn.topic sn_topic
+        ,sn.sub_type sn_sub_type
+        ,sn.from_user sn_from_user
+        ,sn.from_user_name sn_from_user_name
+        ,sn.from_user_avatar sn_from_user_avatar
+        from sys_notice sn
+        <where>
+            -- 禁止状态不能有
+            (
+            select count(1)
+            from sys_notice_user snu
+            where snu.notice_id = sn.id
+            and snu.status = 0
+            <include refid="related_condition"/>
+            <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
+                limit 1
+            </if>
+            <if test="_db_type_db_ == 'oracle'">
+                and ROWNUM <![CDATA[<]]> 2
+            </if>
+            ) = 0
+            and (
+            (
+            select count(1)
+            from sys_notice_user snu
+            where snu.notice_id = sn.id
+            and (snu.status = 1 or snu.status = 2)
+            <include refid="related_condition"/>
+            <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
+                limit 1
+            </if>
+            <if test="_db_type_db_ == 'oracle'">
+                and ROWNUM <![CDATA[<]]> 2
+            </if>
+            ) > 0
+            or case
+            -- 如果不是指定通知消息
+            when sn.positive = 0 then
+            (
+            select count(1)
+            from sys_notice_user snu
+            where snu.notice_id = sn.id
+            <include refid="related_condition"/>
+            <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
+                limit 1
+            </if>
+            <if test="_db_type_db_ == 'oracle'">
+                and ROWNUM <![CDATA[<]]> 2
+            </if>
+            ) = 0
+            end
+            )
+            <!--如果是传入的参数是 params 可以这样写来获取到 map 里面的参数，当然，在这之前要做驼峰转下划线处理-->
+            <foreach collection="params.keys" item="k" index="index" open=" and " separator="and">
+                <if test="null != params[k]">
+                    <choose>
+                        <when test="k=='title'">
+                            <choose>
+                                <when test="_db_type_db_ == 'sqlite'">
+                                    sn.${k} like '%' || #{params.${k}} || '%'
+                                </when>
+                                <otherwise>
+                                    sn.${k} like concat(concat('%',#{params.${k}}),'%')
+                                </otherwise>
+                            </choose>
+                        </when>
+                        <otherwise>
+                            sn.${k} = #{params.${k}}
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+
+    <select id="countQuery" resultType="java.lang.Long">
+        select count(1) from (
+        <include refid="base_query"/>
+        ) temp
+    </select>
+
+    <select id="listQuery" resultMap="VOResultMap">
+        select
+        case
+        when nu.status is null then 2
+        else nu.status
+        end nu_status
+        ,n.*
+        from (
+        <choose>
+            <when test="offset != null and size != null">
+
+                <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
+                    <include refid="base_query"/>
+                    <if test="pageOrder != null">
+                        order by ${pageOrder}
+                    </if>
+                    limit #{size} offset #{offset}
+                </if>
+
+                <if test="_db_type_db_ == 'oracle'">
+                    SELECT offset_start.* FROM (
+                    SELECT rownum rn,offset_end.* FROM (
+
+                    <include refid="base_query"/>
+                    <if test="pageOrder != null">
+                        order by ${pageOrder}
+                    </if>
+
+                    ) offset_end WHERE rownum <![CDATA[<=]]> (#{offset}+#{size})
+                    ) offset_start WHERE offset_start.rn <![CDATA[>]]> #{offset}
+                </if>
+
+            </when>
+            <otherwise>
+                <include refid="base_query"/>
+                <if test="pageOrder != null">
+                    order by ${pageOrder}
+                </if>
+            </otherwise>
+        </choose>
+        ) n left join
+        (
+        select
+        snu.notice_id
+        ,snu.status
+        from sys_notice_user snu
+        <where>
+            -- 这里查询关联的是查询用户能看到的状态
+            snu.notice_type = '1'
+            <include refid="related_condition"/>
+        </where>
+        )
+        nu on n.sn_id = nu.notice_id
+    </select>
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.module.lf.mapper.NodesMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.module.lf.domain.Nodes">
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="processId" column="process_id" jdbcType="BIGINT"/>
+        <result property="properties" column="properties" jdbcType="OTHER"/>
+        <result property="text" column="text" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,process_id,properties,
+        text,type
+    </sql>
+
+    <insert id="insertSelective" parameterType="io.github.mangocrisp.spring.taybct.module.lf.domain.Nodes">
+        insert into lf_nodes
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="processId != null">process_id,</if>
+            <if test="properties != null">properties,</if>
+            <if test="text != null">text,</if>
+            <if test="type != null">type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=VARCHAR},</if>
+            <if test="processId != null">#{processId,jdbcType=BIGINT},</if>
+            <if test="properties != null">#{properties,jdbcType=OTHER},</if>
+            <if test="text != null">#{text,jdbcType=VARCHAR},</if>
+            <if test="type != null">#{type,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+
+</mapper>

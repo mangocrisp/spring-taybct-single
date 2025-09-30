@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.api.system.mapper.SysRoleMenuMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.api.system.domain.SysRoleMenu">
+        <result property="roleId" column="role_id" jdbcType="BIGINT"/>
+        <result property="menuId" column="menu_id" jdbcType="BIGINT"/>
+        <result property="checked" column="checked" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        role_id
+        ,menu_id,checked
+    </sql>
+
+    <delete id="removeByLoginRoleCode">
+        delete from sys_role_menu srm
+        where srm.role_id = #{roleId}
+        and menu_id in (
+        select
+        a.menu_id
+        from
+        (
+        select menu_id from sys_role_menu srm2
+        left join sys_role sr on srm2.role_id = sr.id and sr.status = 1 and sr.is_deleted = 0
+        where sr.code in
+        <foreach collection="authorities" item="code" open="(" separator="," close=")" index="index">
+            #{code}
+        </foreach>
+        ) a
+        )
+    </delete>
+
+    <resultMap id="VoMap" type="io.github.mangocrisp.spring.taybct.api.system.vo.SysRoleMenuVO">
+
+        <id property="id" column="role_id" jdbcType="BIGINT"/>
+        <result property="name" column="role_name" jdbcType="VARCHAR"/>
+        <result property="code" column="role_code" jdbcType="VARCHAR"/>
+        <result property="sort" column="role_sort" jdbcType="INTEGER"/>
+        <result property="status" column="role_status" jdbcType="TINYINT"/>
+
+        <collection property="menus" javaType="java.util.Set" resultMap="MenuMap"/>
+    </resultMap>
+
+    <resultMap id="MenuMap" type="io.github.mangocrisp.spring.taybct.api.system.vo.SysMenuVO">
+        <id property="id" column="menu_id" jdbcType="BIGINT"/>
+        <result property="name" column="menu_name" jdbcType="VARCHAR"/>
+        <result property="parentId" column="menu_parent_id" jdbcType="BIGINT"/>
+        <result property="sort" column="menu_sort" jdbcType="INTEGER"/>
+        <result property="routeName" column="menu_route_name" jdbcType="VARCHAR"/>
+        <result property="routePath" column="menu_route_path" jdbcType="VARCHAR"/>
+        <result property="component" column="menu_component" jdbcType="VARCHAR"/>
+        <result property="redirect" column="menu_redirect" jdbcType="VARCHAR"/>
+        <result property="isCache" column="menu_is_cache" jdbcType="TINYINT"/>
+        <result property="menuType" column="menu_menu_type" jdbcType="CHAR"/>
+        <result property="hidden" column="menu_hidden" jdbcType="BOOLEAN"/>
+        <result property="status" column="menu_status" jdbcType="TINYINT"/>
+        <result property="icon" column="menu_icon" jdbcType="VARCHAR"/>
+        <result property="isBlank" column="menu_is_blank" jdbcType="TINYINT"/>
+        <result property="checked" column="checked" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <select id="list" resultMap="VoMap">
+        select sr.id role_id,
+        sr.code role_code,
+        sr.name role_name,
+        sr.sort role_sort,
+        sr.status role_status,
+        sm.id menu_id,
+        sm.name menu_name,
+        sm.parent_id menu_parent_id,
+        sm.always_show menu_always_show,
+        sm.props menu_props,
+        sm.sort menu_sort,
+        sm.route_name menu_route_name,
+        sm.route_path menu_route_path,
+        sm.component menu_component,
+        sm.redirect menu_redirect,
+        sm.is_cache menu_is_cache,
+        sm.menu_type menu_menu_type,
+        sm.hidden menu_hidden,
+        sm.status menu_status,
+        sm.icon menu_icon,
+        sm.is_blank menu_is_blank,
+        srm.checked checked
+        from sys_role sr
+        left join sys_role_menu srm on srm.role_id = sr.id and srm.menu_id <![CDATA[<>]]> 0
+        left join sys_menu sm on srm.menu_id = sm.id
+        where sr.status = 1
+        and sr.is_deleted = 0
+        <if test="isRoot != 1 and authorities!=null and authorities.size!=0">
+            and exists (
+            select srm2.menu_id from sys_role_menu srm2
+            left join sys_role sr on srm2.role_id = sr.id and sr.status = 1 and sr.is_deleted = 0
+            where srm2.menu_id = sm.id
+            and sr.code in
+            <foreach collection="authorities" item="code" open="(" separator="," close=")" index="index">
+                #{code}
+            </foreach>
+            )
+        </if>
+        and exists (select role_id from sys_role_menu
+        <where>
+            role_id = sr.id
+            <if test="params.menuId != null">
+                <choose>
+                    <when test="_db_type_db_ == 'postgresql'">
+                        and menu_id = CAST(#{params.menuId} AS BIGINT)
+                    </when>
+                    <otherwise>
+                        and menu_id = #{params.menuId}
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        )
+        <if test="params.roleId != null">
+            <choose>
+                <when test="_db_type_db_ == 'postgresql'">
+                    and sr.id = CAST(#{params.roleId} AS BIGINT)
+                </when>
+                <otherwise>
+                    and sr.id = #{params.roleId}
+                </otherwise>
+            </choose>
+        </if>
+        <if test="params.checked != null">
+            <choose>
+                <when test="_db_type_db_ == 'postgresql'">
+                    and srm.checked = CAST(#{params.checked} AS SMALLINT)
+                </when>
+                <otherwise>
+                    and srm.checked = #{params.checked}
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
+
+</mapper>

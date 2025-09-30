@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.api.system.mapper.SysRoleMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.api.system.domain.SysRole">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        sr
+        .
+        id
+        ,sr.name
+        ,sr.code
+        ,sr.sort
+        ,sr.status
+        ,sr.create_user
+        ,sr.create_time
+        ,sr.update_user
+        ,sr.update_time
+        ,sr.is_deleted
+    </sql>
+
+    <sql id="sql_list_role">
+        select distinct sr.id
+                      , sr.name
+                      , sr.code
+                      , sr.sort
+                      , sr.status
+                      , sr.create_user
+                      , sr.create_time
+                      , sr.update_user
+                      , sr.update_time
+                      , sr.is_deleted
+        from sys_user_role sur
+                 left join sys_role sr on sur.role_id = sr.id
+        where sur.user_id = #{userId}
+          and sr.is_deleted = 0
+          and sr.tenant_id = #{tenantId}
+    </sql>
+
+    <select id="countByUserIdTenantId" resultType="java.lang.Integer">
+        select count(1) from (
+        <include refid="sql_list_role"/>
+        ) temp
+    </select>
+
+    <select id="listUserTenantRoles" resultMap="BaseResultMap">
+        <include refid="sql_list_role"/>
+    </select>
+
+    <sql id="base_query">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_role sr
+        where
+        sr.is_deleted = 0
+        and sr.tenant_id = #{tenantId}
+        and sr.code <![CDATA[<>]]> #{root}
+        <if test="isRoot != 1">
+            <!--如果不是 ROOT 角色，不能查询 ADMIN 角色-->
+            and sr.code <![CDATA[<>]]> #{admin}
+        </if>
+        <if test="isRoot != 1 and isAdmin != 1 and authorities!=null and authorities.size!=0">
+            <!--如果不是 ROOT 也不是 ADMIN 不允许查询属于自己的角色 -->
+            and sr.code not in
+            <foreach collection="authorities" item="code" open="(" separator="," close=")">
+                #{code}
+            </foreach>
+        </if>
+        <if test="dto.isCreateByLoginUser != null">
+            and sr.create_user
+            <choose>
+                <when test="dto.isCreateByLoginUser == 1">=</when>
+                <otherwise><![CDATA[<>]]></otherwise>
+            </choose>
+            #{operator}
+        </if>
+        <!--如果不是 ROOT ，或者说是指定要过滤就需要过滤， ROOT 就不需要过滤-->
+        <!--<if test="(isRoot != 1 and authorities!=null and authorities.size!=0) or dto.deptId != null">
+            and (
+            EXISTS(
+            select 1 from sys_role_dept srdu
+            left join sys_dept sd on sd.is_deleted = 0 and srdu.dept_id = sd.id
+            <where>
+                srdu.role_id = sr.id
+                <if test="dto.deptId != null">
+                    &#45;&#45; 指定部门查询，要把当前部门，和当前部门下的所有子集都查询出来
+                    and (
+                    sd.id = #{dto.deptId}
+                    <if test="dto.includeChildren != null and dto.includeChildren == 1">
+                        <if test="_db_type_db_ == 'postgresql'">
+                            or CAST(#{dto.deptId} as VARCHAR) = ANY(STRING_TO_ARRAY(sd.pid_all, ','))
+                        </if>
+                        <if test="_db_type_db_ == 'mysql'">
+                            or FIND_IN_SET(#{dto.deptId},sd.pid_all)
+                        </if>
+                        <if test="_db_type_db_ == 'oracle'">
+                            or INSTR(sd.pid_all, TO_CHAR(#{dto.deptId}))>0
+                        </if>
+                    </if>
+                    )
+                </if>
+                <if test="dto.includeChildren != null and dto.includeChildren == 1">
+                    &lt;!&ndash;这里是为了限制角色可以被关联查询的部门的范围&ndash;&gt;
+                    <include refid="io.github.mangocrisp.spring.taybct.api.system.mapper.SysDeptMapper.Auth_Condition"/>
+                </if>
+            </where>
+            )
+            )
+        </if>-->
+        <!--如果是传入的参数是 params 可以这样写来获取到 map 里面的参数，当然，在这之前要做驼峰转下划线处理-->
+        <foreach collection="params.keys" item="k" index="index" open=" and " separator="and">
+            <if test="null != params[k]">
+                <choose>
+                    <when test="k=='name' or k=='name'">
+                        <choose>
+                            <when test="_db_type_db_ == 'sqlite'">
+                                sr.${k} like '%' || #{params.${k}} || '%'
+                            </when>
+                            <otherwise>
+                                sr.${k} like concat(concat('%',#{params.${k}}),'%')
+                            </otherwise>
+                        </choose>
+                    </when>
+                    <otherwise>
+                        sr.${k} = #{params.${k}}
+                    </otherwise>
+                </choose>
+            </if>
+        </foreach>
+    </sql>
+
+    <select id="countQuery" resultType="java.lang.Long">
+        select count(1) from (
+        <include refid="base_query"/>
+        ) temp
+    </select>
+
+    <select id="listQuery" resultMap="BaseResultMap">
+        <choose>
+            <when test="offset != null and size != null">
+
+                <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
+                    <include refid="base_query"/>
+                    <if test="pageOrder != null">
+                        order by ${pageOrder}
+                    </if>
+                    limit #{size} offset #{offset}
+                </if>
+
+                <if test="_db_type_db_ == 'oracle'">
+                    SELECT offset_start.* FROM (
+                    SELECT rownum rn,offset_end.* FROM (
+
+                    <include refid="base_query"/>
+                    <if test="pageOrder != null">
+                        order by ${pageOrder}
+                    </if>
+
+                    ) offset_end WHERE rownum <![CDATA[<=]]> (#{offset}+#{size})
+                    ) offset_start WHERE offset_start.rn <![CDATA[>]]> #{offset}
+                </if>
+
+            </when>
+            <otherwise>
+                <include refid="base_query"/>
+                <if test="pageOrder != null">
+                    order by ${pageOrder}
+                </if>
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

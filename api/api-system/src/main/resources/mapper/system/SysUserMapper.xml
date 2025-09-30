@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.api.system.mapper.SysUserMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.api.system.domain.SysUser">
+        <id property="id" column="su_id" jdbcType="BIGINT"/>
+        <result property="username" column="su_username" jdbcType="VARCHAR"/>
+        <result property="realName" column="su_real_name" jdbcType="VARCHAR"/>
+        <result property="nickname" column="su_nickname" jdbcType="VARCHAR"/>
+        <result property="gender" column="su_gender" jdbcType="VARCHAR"/>
+        <result property="password" column="su_password" jdbcType="VARCHAR"/>
+        <result property="avatar" column="su_avatar" jdbcType="VARCHAR"/>
+        <result property="phone" column="su_phone" jdbcType="VARCHAR"/>
+        <result property="email" column="su_email" jdbcType="VARCHAR"/>
+        <result property="userType" column="su_user_type" jdbcType="VARCHAR"/>
+        <result property="loginIp" column="su_login_ip" jdbcType="VARCHAR"/>
+        <result property="loginDate" column="su_login_date" jdbcType="TIMESTAMP"/>
+        <result property="status" column="su_status" jdbcType="TINYINT"/>
+        <result property="createUser" column="su_create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="su_create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="su_update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="su_update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="su_is_deleted" jdbcType="TINYINT"/>
+        <result property="openid" column="su_openid" jdbcType="VARCHAR"/>
+        <result property="passwdTime" column="su_passwd_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="user_info_column_list">
+        su
+        .
+        id
+        su_id
+        ,su.username su_username
+        ,su.nickname su_nickname
+        ,su.gender su_gender
+        ,su.avatar su_avatar
+        ,su.phone su_phone
+        ,su.email su_email
+        ,su.user_type su_user_type
+        ,su.login_ip su_login_ip
+        ,su.login_date su_login_date
+        ,su.status su_status
+        ,su.passwd_time su_passwd_time
+    </sql>
+
+    <sql id="base_column_list">
+        su
+        .
+        id
+        su_id
+        ,su.username su_username
+        ,su.real_name su_real_name
+        ,su.nickname su_nickname
+        ,su.gender su_gender
+        ,su.password su_password
+        ,su.avatar su_avatar
+        ,su.phone su_phone
+        ,su.email su_email
+        ,su.user_type su_user_type
+        ,su.login_ip su_login_ip
+        ,su.login_date su_login_date
+        ,su.status su_status
+        ,su.create_user su_create_user
+        ,su.create_time su_create_time
+        ,su.update_user su_update_user
+        ,su.update_time su_update_time
+        ,su.is_deleted su_is_deleted
+        ,su.openid su_openid
+    </sql>
+
+    <insert id="addWechatUser">
+        INSERT INTO `taybct`.`sys_user` (id,
+                                         username,
+                                         nickname,
+                                         gender,
+                                         password,
+                                         avatar,
+                                         create_time,
+                                         openid)
+        values ( #{user.id}
+               , #{user.username}
+               , #{user.nickname}
+               , #{user.gender}
+               , #{user.password}
+               , #{user.avatar}
+               , #{user.createTime}
+               , #{user.openid})
+    </insert>
+
+    <resultMap id="Oauth2UserResultMap" type="io.github.mangocrisp.spring.taybct.api.system.dto.OAuth2UserDTO">
+        <id property="userId" column="su_id" jdbcType="BIGINT"/>
+        <result property="username" column="su_username" jdbcType="VARCHAR"/>
+        <result property="password" column="su_password" jdbcType="VARCHAR"/>
+        <result property="status" column="su_status" jdbcType="TINYINT"/>
+        <collection property="roles" javaType="java.util.List" resultMap="Oauth2UserRolesResultMap"/>
+    </resultMap>
+
+    <resultMap id="Oauth2UserRolesResultMap" type="java.lang.String">
+        <result column="sr_code" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="Oauth2UserDeptIdsResultMap" type="java.lang.String">
+        <result column="sud_dept_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getUserByFiled" resultMap="Oauth2UserResultMap">
+        select su.id su_id,
+        su.username su_username,
+        su.password su_password,
+        su.status su_status,
+        <choose>
+            <when test="_db_type_db_ == 'sqlite'">
+                sr.tenant_id || ':' || sr.code sr_code
+            </when>
+            <otherwise>
+                concat(sr.tenant_id, concat(':', sr.code)) sr_code
+            </otherwise>
+        </choose>
+        from sys_user su
+        left join sys_user_role sur on su.id = sur.user_id
+        left join sys_role sr on sur.role_id = sr.id and sr.status = 1
+        where su.is_deleted = 0
+        and sr.is_deleted = 0
+        and su.${field} = #{value}
+    </select>
+
+
+    <resultMap id="UserInfoVOResult" type="io.github.mangocrisp.spring.taybct.api.system.vo.UserInfoVO"
+               extends="BaseResultMap">
+        <collection property="roles" javaType="java.util.List" resultMap="Oauth2UserRolesResultMap"/>
+        <collection property="deptIds" javaType="java.util.List" resultMap="Oauth2UserDeptIdsResultMap"/>
+    </resultMap>
+
+    <select id="getUserInfoByUserId" resultMap="UserInfoVOResult">
+        select
+        <include refid="user_info_column_list"/>
+        , sr.code sr_code
+        , sud.dept_id sud_dept_id
+        from sys_user su
+        left join sys_user_role sur on sur.user_id = su.id
+        left join sys_role sr on sr.id = sur.role_id
+        left join sys_user_dept sud on sud.user_id = su.id
+        <where>
+            su.is_deleted = 0
+            <choose>
+                <when test="_db_type_db_ == 'postgresql'">
+                    and su.id = CAST(#{userId} AS BIGINT)
+                </when>
+                <otherwise>
+                    and su.id = #{userId}
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+    <sql id="base_query">
+        select
+        <include refid="base_column_list"/>
+        from (
+        select
+        user_id
+        from
+        sys_user_tenant sut
+        where sut.tenant_id = #{tenantId}
+        ) ut left join sys_user su on ut.user_id = su.id
+        where
+        su.is_deleted = 0
+        and su.id <![CDATA[<>]]> #{operator}
+        and su.id <![CDATA[<>]]> #{root}
+        <if test="dto.isCreateByLoginUser != null">
+            and su.create_user
+            <choose>
+                <when test="dto.isCreateByLoginUser == 1">=</when>
+                <otherwise><![CDATA[<>]]></otherwise>
+            </choose>
+            #{operator}
+        </if>
+        <!--如果不是 ROOT ，或者说是指定要过滤就需要过滤， ROOT 就不需要过滤-->
+        <if test="(isRoot != 1 and authorities!=null and authorities.size!=0) or dto.deptId != null">
+            and (
+            EXISTS(
+            select 1 from sys_user_dept sudu
+            left join sys_dept sd on sd.is_deleted = 0 and sudu.dept_id = sd.id
+            <where>
+                sudu.user_id = su.id
+                <if test="dto.deptId != null">
+                    -- 指定部门查询，要把当前部门，和当前部门下的所有子集都查询出来
+                    and (
+                    sd.id = #{dto.deptId}
+                    <if test="dto.includeChildren != null and dto.includeChildren == 1">
+                        <if test="_db_type_db_ == 'postgresql'">
+                            or CAST(#{dto.deptId} as VARCHAR) = ANY(STRING_TO_ARRAY(sd.pid_all, ','))
+                        </if>
+                        <if test="_db_type_db_ == 'mysql'">
+                            or FIND_IN_SET(#{dto.deptId},sd.pid_all)
+                        </if>
+                        <if test="_db_type_db_ == 'sqlite'">
+                            or ',' || sd.pid_all || ',' like '%,' || dto.deptId || ',%'
+                        </if>
+                        <if test="_db_type_db_ == 'oracle'">
+                            or INSTR(sd.pid_all, TO_CHAR(#{dto.deptId}))>0
+                        </if>
+                    </if>
+                    )
+                </if>
+                <if test="dto.includeChildren != null and dto.includeChildren == 1">
+                    <!--这里是为了限制用户可以被关联查询的部门的范围-->
+                    <include refid="io.github.mangocrisp.spring.taybct.api.system.mapper.SysDeptMapper.Auth_Condition"/>
+                </if>
+            </where>
+            )
+            )
+        </if>
+        <!--如果是传入的参数是 params 可以这样写来获取到 map 里面的参数，当然，在这之前要做驼峰转下划线处理-->
+        <foreach collection="params.keys" item="k" index="index" open=" and " separator="and">
+            <if test="null != params[k]">
+                <choose>
+                    <when test="k=='username' or k=='real_name' or k=='nickname'">
+                        <choose>
+                            <when test="_db_type_db_ == 'sqlite'">
+                                su.${k} like '%' || #{params.${k}} || '%'
+                            </when>
+                            <otherwise>
+                                su.${k} like concat(concat('%',#{params.${k}}),'%')
+                            </otherwise>
+                        </choose>
+                    </when>
+                    <otherwise>
+                        su.${k} = #{params.${k}}
+                    </otherwise>
+                </choose>
+            </if>
+        </foreach>
+    </sql>
+
+    <select id="countQuery" resultType="java.lang.Long">
+        select count(1) from (
+        <include refid="base_query"/>
+        ) temp
+    </select>
+
+    <select id="listQuery" resultMap="BaseResultMap">
+        <choose>
+            <when test="offset != null and size != null">
+
+                <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
+                    <include refid="base_query"/>
+                    <if test="pageOrder != null">
+                        order by ${pageOrder}
+                    </if>
+                    limit #{size} offset #{offset}
+                </if>
+
+                <if test="_db_type_db_ == 'oracle'">
+                    SELECT offset_start.* FROM (
+                    SELECT rownum rn,offset_end.* FROM (
+
+                    <include refid="base_query"/>
+                    <if test="pageOrder != null">
+                        order by ${pageOrder}
+                    </if>
+
+                    ) offset_end WHERE rownum <![CDATA[<=]]> (#{offset}+#{size})
+                    ) offset_start WHERE offset_start.rn <![CDATA[>]]> #{offset}
+                </if>
+
+            </when>
+            <otherwise>
+                <include refid="base_query"/>
+                <if test="pageOrder != null">
+                    order by ${pageOrder}
+                </if>
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

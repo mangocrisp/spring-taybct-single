@@ -25,28 +25,32 @@
 
     <dependencies>
 
-        <!--基础模块-->
+        <!--公共模块（偏业务）-->
         <dependency>
             <groupId>io.github.mangocrisp</groupId>
-            <artifactId>spring-taybct-tool-core</artifactId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- SpringCloud Openfeign 服务调用 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>${spring-cloud-starter-openfeign.version}</version>
             <optional>true</optional>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-httpclient</artifactId>
+            <version>${feign-httpclient.version}</version>
             <optional>true</optional>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-okhttp</artifactId>
+            <version>${feign-okhttp.version}</version>
             <optional>true</optional>
             <scope>provided</scope>
         </dependency>
@@ -54,20 +58,16 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+            <version>${spring-cloud-alibaba.version}</version>
             <optional>true</optional>
             <scope>provided</scope>
-        </dependency>
-
-        <!--公共模块（偏业务）-->
-        <dependency>
-            <groupId>io.github.mangocrisp</groupId>
-            <artifactId>spring-taybct-common</artifactId>
         </dependency>
 
         <!--如果要使用 dubbo 就引入 这个依赖-->
         <dependency>
             <groupId>org.apache.dubbo</groupId>
             <artifactId>dubbo-spring-boot-starter</artifactId>
+            <version>${dubbo.version}</version>
             <optional>true</optional>
             <scope>provided</scope>
         </dependency>
@@ -75,6 +75,7 @@
         <dependency>
             <artifactId>nacos-client</artifactId>
             <groupId>com.alibaba.nacos</groupId>
+            <version>${nacos-client.version}</version>
             <optional>true</optional>
             <scope>provided</scope>
         </dependency>

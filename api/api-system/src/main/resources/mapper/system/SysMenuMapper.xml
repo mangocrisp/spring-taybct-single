@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.api.system.mapper.SysMenuMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.api.system.domain.SysMenu">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
+        <result property="alwaysShow" column="always_show" jdbcType="INTEGER"/>
+        <result property="props" column="props" jdbcType="INTEGER"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="routeName" column="route_name" jdbcType="VARCHAR"/>
+        <result property="routePath" column="route_path" jdbcType="VARCHAR"/>
+        <result property="component" column="component" jdbcType="VARCHAR"/>
+        <result property="redirect" column="redirect" jdbcType="VARCHAR"/>
+        <result property="isCache" column="is_cache" jdbcType="TINYINT"/>
+        <result property="menuType" column="menu_type" jdbcType="CHAR"/>
+        <result property="hidden" column="hidden" jdbcType="BOOLEAN"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="isBlank" column="is_blank" jdbcType="TINYINT"/>
+        <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <!--菜单列表-->
+    <resultMap id="SysMenuVOMap" type="io.github.mangocrisp.spring.taybct.api.system.vo.SysMenuVO"
+               extends="BaseResultMap">
+        <result property="hasChildren" column="has_children" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        sm
+        .
+        id
+        ,
+        sm.name,
+        sm.parent_id,
+        sm.always_show,
+        sm.props,
+        sm.sort,
+        sm.route_name,
+        sm.route_path,
+        sm.component,
+        sm.redirect,
+        sm.is_cache,
+        sm.menu_type,
+        sm.hidden,
+        sm.status,
+        sm.icon,
+        sm.is_blank,
+        sm.create_user,
+        sm.create_time,
+        sm.update_user,
+        sm.update_time,
+        sm.is_deleted
+    </sql>
+
+    <resultMap id="RouterResultMap" type="io.github.mangocrisp.spring.taybct.api.system.vo.RouterVO">
+        <id property="id" column="sm_id" jdbcType="BIGINT"/>
+        <result property="title" column="sm_title" jdbcType="VARCHAR"/>
+        <result property="parentId" column="sm_parent_id" jdbcType="BIGINT"/>
+        <result property="sort" column="sm_sort" jdbcType="INTEGER"/>
+        <result property="alwaysShow" column="sm_always_show" jdbcType="TINYINT"/>
+        <result property="path" column="sm_route_path" jdbcType="VARCHAR"/>
+        <result property="name" column="sm_name" jdbcType="VARCHAR"/>
+        <result property="redirect" column="sm_redirect" jdbcType="VARCHAR"/>
+        <result property="component" column="sm_component" jdbcType="VARCHAR"/>
+        <result property="props" column="sm_props" jdbcType="VARCHAR"/>
+        <result property="hidden" column="sm_hidden" jdbcType="TINYINT"/>
+        <result property="icon" column="sm_icon" jdbcType="VARCHAR"/>
+        <result property="isBlank" column="sm_is_blank" jdbcType="TINYINT"/>
+        <result property="isCache" column="sm_is_cache" jdbcType="TINYINT"/>
+        <result property="menuType" column="sm_menu_type" jdbcType="VARCHAR"/>
+        <association property="meta" javaType="io.github.mangocrisp.spring.taybct.api.system.vo.RouterMeta"
+                     column="sm_id" resultMap="RouterMetaResultMap"/>
+        <!--这个路由（菜单）需要限制的按钮权限-->
+        <collection property="permissions" javaType="java.util.Set" resultMap="RouterPermResultMap"/>
+        <!--用户拥有的角色关联的按钮权限-->
+        <collection property="rolePermissions" javaType="java.util.Set" resultMap="RolePermResultMap"/>
+    </resultMap>
+
+    <resultMap id="RouterMetaResultMap" type="io.github.mangocrisp.spring.taybct.api.system.vo.RouterMeta">
+        <id property="id" column="sm_id" jdbcType="BIGINT"/>
+        <result property="title" column="sm_title" jdbcType="VARCHAR"/>
+        <result property="icon" column="sm_icon" jdbcType="VARCHAR"/>
+        <result property="isBlank" column="sm_is_blank" jdbcType="TINYINT"/>
+        <result property="isCache" column="sm_is_cache" jdbcType="TINYINT"/>
+        <result property="menuType" column="sm_menu_type" jdbcType="VARCHAR"/>
+        <collection property="permissions" javaType="java.util.Set" resultMap="RouterPermResultMap"/>
+    </resultMap>
+
+    <resultMap id="RouterPermResultMap" type="io.github.mangocrisp.spring.taybct.api.system.vo.RouterPerm">
+        <id property="id" column="sp_id" jdbcType="BIGINT"/>
+        <result property="menuId" column="sp_menu_id" jdbcType="BIGINT"/>
+        <result property="name" column="sp_name" jdbcType="VARCHAR"/>
+        <result property="urlPerm" column="sp_url_perm" jdbcType="VARCHAR"/>
+        <result property="btnPerm" column="sp_btn_perm" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="RolePermResultMap" type="io.github.mangocrisp.spring.taybct.api.system.vo.RouterPerm">
+        <id property="id" column="role_sp_id" jdbcType="BIGINT"/>
+        <result property="menuId" column="role_sp_menu_id" jdbcType="BIGINT"/>
+        <result property="name" column="role_sp_name" jdbcType="VARCHAR"/>
+        <result property="urlPerm" column="role_sp_url_perm" jdbcType="VARCHAR"/>
+        <result property="btnPerm" column="role_sp_btn_perm" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="listByRoleCode" resultMap="SysMenuVOMap">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        CASE
+        WHEN
+        ( SELECT id FROM sys_menu WHERE is_deleted = 0 and parent_id = sm.id
+        <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
+            limit 1
+        </if>
+        <if test="_db_type_db_ == 'oracle'">
+            and ROWNUM <![CDATA[<]]> 2
+        </if>
+        ) IS NULL THEN
+        0 ELSE 1
+        END has_children
+        from sys_menu sm
+        <where>
+            and sm.is_deleted = 0
+            <if test="isRoot != 1 and authorities!=null and authorities.size!=0">
+                and exists (
+                select srm.menu_id from sys_role_menu srm
+                left join sys_role sr on srm.role_id = sr.id and sr.status = 1 and sr.is_deleted = 0
+                where srm.menu_id = sm.id
+                and sr.code in
+                <foreach collection="authorities" item="code" open="(" separator="," close=")" index="index">
+                    #{code}
+                </foreach>
+                )
+            </if>
+            <!--如果是传入的参数是 params 可以这样写来获取到 map 里面的参数，当然，在这之前要做驼峰转下划线处理-->
+            <foreach collection="params.keys" item="k" index="index" open=" and " separator="and">
+                <if test="null != params[k]">
+                    <choose>
+                        <when test="k=='name'">
+                            <choose>
+                                <when test="_db_type_db_ == 'sqlite'">
+                                    sm.${k} like '%' || #{params.${k}} || '%'
+                                </when>
+                                <otherwise>
+                                    sm.${k} like concat(concat('%',#{params.${k}}),'%')
+                                </otherwise>
+                            </choose>
+                        </when>
+                        <when test="k=='parent_id' and _db_type_db_ == 'postgresql'">
+                            sm.${k} = CAST(#{params.${k}} AS BIGINT)
+                        </when>
+                        <otherwise>
+                            sm.${k} = #{params.${k}}
+                        </otherwise>
+                    </choose>
+                </if>
+            </foreach>
+        </where>
+        <if test="pageOrder != null">
+            order by ${pageOrder}
+        </if>
+    </select>
+
+    <!--查询权限的 sql-->
+    <sql id="loadPerm">
+        SELECT sp.id       sp_id,
+               sp.menu_id  sp_menu_id,
+               sp.name     sp_name,
+               sp.url_perm sp_url_perm,
+               sp.btn_perm sp_btn_perm
+        FROM sys_permission sp
+    </sql>
+    <!--查询角色拥有的权限 sql-->
+    <sql id="loadPermByRoleCodeSQL">
+        <include refid="loadPerm"/>
+        <where>
+            <if test="isRoot != 1 and authorities!=null and authorities.size!=0">
+                and exists (
+                select srp.permission_id from sys_role_permission srp
+                left join sys_role sr on srp.role_id = sr.id and sr.status = 1 and sr.is_deleted = 0
+                where srp.permission_id = sp.id
+                and sr.code in
+                <foreach collection="authorities" item="code" open="(" separator="," close=")" index="index">
+                    #{code}
+                </foreach>
+                )
+            </if>
+        </where>
+    </sql>
+
+    <select id="loadRouterByRoleCode" resultMap="RouterResultMap">
+        SELECT
+        menu.*,
+        <!--
+        这个可以返回菜单所有的权限
+        perm.*,
+        -->
+        perm.*,
+        role_perm.*
+        FROM
+        (
+        SELECT
+        sm.id sm_id,
+        sm.parent_id sm_parent_id,
+        sm.sort sm_sort,
+        sm.always_show sm_always_show,
+        sm.route_path sm_route_path,
+        <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite'">
+            IFNULL(sm.route_name,'') sm_name,
+        </if>
+        <if test="_db_type_db_ == 'postgresql'">
+            coalesce(sm.route_name,'') sm_name,
+        </if>
+        <if test="_db_type_db_ == 'oracle'">
+            NVL(sm.route_name,'') sm_name,
+        </if>
+        sm.redirect sm_redirect,
+        sm.component sm_component,
+        sm.props sm_props,
+        sm.hidden sm_hidden,
+        sm.name sm_title,
+        sm.icon sm_icon,
+        sm.is_blank sm_is_blank,
+        sm.is_cache sm_is_cache,
+        sm.menu_type sm_menu_type
+        FROM
+        sys_menu sm
+        <where>
+            sm.status = 1
+            and sm.is_deleted = 0
+            <if test="isRoot != 1 and authorities!=null and authorities.size!=0">
+                and exists (
+                select srm.menu_id from sys_role_menu srm
+                left join sys_role sr on srm.role_id = sr.id and sr.status = 1 and sr.is_deleted = 0
+                where srm.menu_id = sm.id
+                and sr.code in
+                <foreach collection="authorities" item="code" open="(" separator="," close=")" index="index">
+                    #{code}
+                </foreach>
+                )
+            </if>
+        </where>
+        order by sm.sort
+        ) menu
+        <!-- 这个可以返回菜单所有的权限
+        LEFT JOIN (
+            <include refid="loadPerm"></include>
+        ) perm ON menu.sm_id = perm.sp_menu_id
+        -->
+        LEFT JOIN (
+        <include refid="loadPerm"/>
+        ) perm ON menu.sm_id = perm.sp_menu_id
+        LEFT JOIN (
+        SELECT
+        role_sp.sp_id role_sp_id,
+        role_sp.sp_menu_id role_sp_menu_id,
+        role_sp.sp_name role_sp_name,
+        role_sp.sp_url_perm role_sp_url_perm,
+        role_sp.sp_btn_perm role_sp_btn_perm
+        FROM (
+        <include refid="loadPermByRoleCodeSQL"/>
+        ) role_sp
+        ) role_perm ON menu.sm_id = role_perm.role_sp_menu_id
+    </select>
+
+    <select id="loadPermByRoleCode" resultMap="RouterPermResultMap">
+        <include refid="loadPermByRoleCodeSQL"/>
+    </select>
+
+</mapper>

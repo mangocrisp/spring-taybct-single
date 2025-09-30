@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.module.lf.mapper.FormReleaseMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.module.lf.domain.FormRelease">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="SMALLINT"/>
+        <result property="formId" column="form_id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="SMALLINT"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="data" column="data" jdbcType="OTHER"/>
+        <result property="version" column="version" jdbcType="BIGINT"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="path" column="path" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,create_user,create_time,
+        update_user,update_time,is_deleted,
+        form_id,name,status,
+        description,data,version,
+        type,path
+    </sql>
+
+    <insert id="publish">
+        insert into lf_form_release
+        (
+        <include refid="Base_Column_List"/>
+        )
+        <foreach collection="dto" separator="union all" item="release">
+            select
+            #{release.id}
+            , #{release.createUser}
+            , #{release.createTime}
+            , #{release.updateUser}
+            , #{release.updateTime}
+            , #{release.isDeleted}
+            , #{release.formId}
+            , #{release.name}
+            , #{release.status}
+            , #{release.description}
+            , data
+            , #{release.version}
+            , type
+            , path
+            from lf_form where id = #{release.formId}
+        </foreach>
+    </insert>
+    <select id="page" resultMap="BaseResultMap">
+        select lf_form_release.id
+        ,lf_form_release.create_user
+        ,lf_form_release.create_time
+        ,lf_form_release.update_user
+        ,lf_form_release.update_time
+        ,lf_form_release.is_deleted
+        ,lf_form_release.form_id
+        ,lf_form_release.name
+        ,lf_form.status as status
+        ,lf_form_release.description
+        <!--,lf_form_release.data 数据太多了列表查询的时候就不要查询了，应该是点查看详情的时候用 id 一个一个的去查询-->
+        ,lf_form_release.version
+        ,lf_form_release.type
+        ,lf_form_release.path
+        from lf_form_release left join lf_form on lf_form.id = lf_form_release.form_id
+        <where>
+            <if test="dto.id != null">
+                and lf_form_release.id = #{dto.id}
+            </if>
+            <!--创建时间-->
+            <if test="dto.createTimeBegin != null">
+                and lf_form_release.create_time &gt;= #{dto.createTimeBegin}
+            </if>
+            <if test="dto.createTimeEnd != null">
+                and lf_form_release.create_time &lt;= #{dto.createTimeEnd}
+            </if>
+            <if test="dto.formId != null">
+                and lf_form_release.form_id = #{dto.formId}
+            </if>
+            <if test="dto.name != null and dto.name != ''">
+                <choose>
+                    <when test="_db_type_db_ == 'sqlite'">
+                        and lf_form_release.name like '%' || #{dto.name} || '%'
+                    </when>
+                    <otherwise>
+                        and lf_form_release.name like concat(concat('%',#{dto.name}),'%')
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="dto.description != null and dto.description != ''">
+                <choose>
+                    <when test="_db_type_db_ == 'sqlite'">
+                        and lf_form_release.description like '%' || #{dto.description} || '%'
+                    </when>
+                    <otherwise>
+                        and lf_form_release.description like concat(concat('%',#{dto.description}),'%')
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="dto.status != null">
+                and lf_form.status = #{dto.status}
+            </if>
+            <if test="dto.version != null">
+                and lf_form_release.version = #{dto.version}
+            </if>
+            <if test="dto.type != null and dto.type != ''">
+                and lf_form_release.type = #{dto.type}
+            </if>
+            <if test="dto.showNewVersion">
+                and lf_form_release.version = lf_form.last_version
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.api.system.mapper.SysPermissionMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.api.system.domain.SysPermission">
+        <id property="id" column="sp_id" jdbcType="BIGINT"/>
+        <result property="groupId" column="sp_group_id" jdbcType="BIGINT"/>
+        <result property="name" column="sp_name" jdbcType="VARCHAR"/>
+        <result property="menuId" column="sp_menu_id" jdbcType="BIGINT"/>
+        <result property="urlPerm" column="sp_url_perm" jdbcType="VARCHAR"/>
+        <result property="btnPerm" column="sp_btn_perm" jdbcType="VARCHAR"/>
+        <result property="createUser" column="sp_create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="sp_create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="sp_update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="sp_update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="RoleResultMap" type="io.github.mangocrisp.spring.taybct.api.system.domain.SysRole">
+        <id property="id" column="role_id" jdbcType="BIGINT"/>
+        <result property="name" column="role_name" jdbcType="VARCHAR"/>
+        <result property="code" column="role_code" jdbcType="VARCHAR"/>
+        <result property="sort" column="role_sort" jdbcType="INTEGER"/>
+        <result property="status" column="role_status" jdbcType="TINYINT"/>
+        <result property="createUser" column="role_create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="role_create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="role_update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="role_update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="role_is_deleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <resultMap id="VoResultMenu" type="io.github.mangocrisp.spring.taybct.api.system.vo.PermissionVO"
+               extends="BaseResultMap">
+        <result property="menuName" column="sm_name"/>
+        <result property="groupName" column="spg_group_name"/>
+    </resultMap>
+
+    <resultMap id="VoResultRole" type="io.github.mangocrisp.spring.taybct.api.system.vo.PermissionVO"
+               extends="BaseResultMap">
+        <collection property="roles" javaType="java.util.Set" resultMap="RoleResultMap"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        sp
+        .
+        id
+        sp_id,
+        sp.group_id sp_group_id,
+        sp.name sp_name,
+        sp.menu_id sp_menu_id,
+        sp.url_perm sp_url_perm,
+        sp.btn_perm sp_btn_perm,
+        sp.create_user sp_create_user,
+        sp.create_time sp_create_time,
+        sp.update_user sp_update_user,
+        sp.update_time sp_update_time
+    </sql>
+
+    <sql id="Role_Column_List">
+        role
+        .
+        id
+        role_id,
+        role.name role_name,
+        <choose>
+            <when test="_db_type_db_ == 'sqlite'">
+                role.tenant_id || ':' || role.code role_code,
+            </when>
+            <otherwise>
+                concat(role.tenant_id,concat(':',role.code)) role_code,
+            </otherwise>
+        </choose>
+        role.sort role_sort,
+        role.status role_status,
+        role.create_user role_create_user,
+        role.create_time role_create_time,
+        role.update_user role_update_user,
+        role.update_time role_update_time,
+        role.is_deleted role_is_deleted
+    </sql>
+
+    <sql id="selectVOSQL">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        sm.name sm_name,
+        spg.name spg_group_name
+        from
+        (
+        select
+        distinct
+        p.id,
+        p.group_id,
+        p.name,
+        p.menu_id,
+        p.url_perm ,
+        p.btn_perm ,
+        p.create_user ,
+        p.create_time ,
+        p.update_user ,
+        p.update_time
+        from sys_permission p
+        <!--权限控制，如果不是 root 用户，就要做限制-->
+        <if test="params.isRoot != 1 and params.authorities!=null and params.authorities.size!=0">
+            left join sys_role_permission rp on p.id = rp.permission_id
+            LEFT JOIN sys_role r ON rp.role_id = r.id and r.status = 1 and r.is_deleted = 0
+            where r.code IN
+            <foreach collection="params.authorities" item="code" open="(" separator="," close=")" index="index">
+                #{code}
+            </foreach>
+        </if>
+        ) sp
+        left join sys_menu sm on sp.menu_id = sm.id
+        left join sys_permission_group spg on sp.group_id = spg.id
+        <where>
+            <if test="params.menuId != null">
+                <choose>
+                    <when test="_db_type_db_ == 'postgresql'">
+                        and sp.menu_id = CAST(#{params.menuId} AS BIGINT)
+                    </when>
+                    <otherwise>
+                        and sp.menu_id = #{params.menuId}
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="params.groupId != null">
+                <choose>
+                    <when test="_db_type_db_ == 'postgresql'">
+                        and sp.group_id = CAST(#{params.groupId} AS BIGINT)
+                    </when>
+                    <otherwise>
+                        and sp.group_id = #{params.groupId}
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="params.name != null and params.name != ''">
+                and sp.name = #{params.name}
+            </if>
+            <if test="params.uslPerm != null and params.uslPerm != ''">
+                and sp.url_perm = #{params.uslPerm}
+            </if>
+            <if test="params.btnPerm != null and params.btnPerm != ''">
+                and sp.btn_perm = #{params.btnPerm}
+            </if>
+        </where>
+        order by sp.update_time desc
+    </sql>
+
+    <select id="selectListVO" resultMap="VoResultMenu">
+        <include refid="selectVOSQL"/>
+    </select>
+
+    <select id="selectPageVo" resultMap="VoResultMenu">
+        <include refid="selectVOSQL"/>
+    </select>
+
+    <select id="loadPermissionRoles" resultMap="VoResultRole">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Role_Column_List"/>
+        FROM
+        (
+        SELECT
+        role_id,
+        permission_id
+        FROM
+        sys_role_permission as temp
+        WHERE
+        EXISTS ( SELECT 1 FROM sys_permission WHERE id = temp.permission_id
+        <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
+            limit 1
+        </if>
+        <if test="_db_type_db_ == 'oracle'">
+            and ROWNUM <![CDATA[<]]> 2
+        </if>
+        )
+        and EXISTS (select 1 from sys_role where id = temp.role_id and is_deleted = 0 and status = 1
+        <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
+            limit 1
+        </if>
+        <if test="_db_type_db_ == 'oracle'">
+            and ROWNUM <![CDATA[<]]> 2
+        </if>
+        )
+        ) srp
+        LEFT JOIN sys_permission sp ON sp.id = srp.permission_id
+        LEFT JOIN sys_role role ON srp.role_id = role.id
+        WHERE
+        sp.url_perm IS NOT NULL
+        AND role.is_deleted = 0
+        AND role.code IS NOT NULL
+    </select>
+
+</mapper>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.admin.file.mapper.SysFileMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.admin.file.domain.SysFile">
+        <id property="id" column="sys_file_id" jdbcType="BIGINT"/>
+        <result property="path" column="sys_file_path" jdbcType="VARCHAR"/>
+        <result property="uploadTime" column="sys_file_upload_time" jdbcType="TIMESTAMP"/>
+        <result property="uploadUser" column="sys_file_upload_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="sys_file_update_time" jdbcType="TIMESTAMP"/>
+        <result property="linked" column="sys_file_linked" jdbcType="SMALLINT"/>
+        <result property="linkedTable" column="sys_file_linked_table" jdbcType="VARCHAR"/>
+        <result property="linkedTableId" column="sys_file_linked_table_id" jdbcType="BIGINT"/>
+        <result property="isDeleted" column="sys_file_is_deleted" jdbcType="SMALLINT"/>
+        <result property="manageType" column="sys_file_manage_type" jdbcType="VARCHAR"/>
+        <result property="fileType" column="sys_file_file_type" jdbcType="VARCHAR"/>
+        <result property="updateUser" column="sys_file_update_user" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <!--分页返回结果-->
+    <resultMap id="BasePageResultMap" type="io.github.mangocrisp.spring.taybct.admin.file.domain.SysFile"
+               extends="BaseResultMap">
+        <!--这里返回的是可扩展的返回结果 vo 之类的-->
+        <!--<collection property="实体类里面的属性" javaType="返回的集合是什么集合的类型如：java.util.List" resultMap="指定映射集合类元素的类型的 resultMap"/>-->
+        <!--<association property="实体类里面的属性" column="关联的另一张表的主键" javaType="另一张表对应的实体类" resultMap="指定映射属性对应对象的 resultMap"/>-->
+    </resultMap>
+
+    <!--表名-->
+    <sql id="Base_Table_Name">sys_file</sql>
+
+    <!--列名-->
+    <sql id="Base_Column_List">
+        sys_file
+        .
+        id
+        as sys_file_id,sys_file.path as sys_file_path,sys_file.upload_time as sys_file_upload_time,
+        sys_file.upload_user as sys_file_upload_user,sys_file.update_time as sys_file_update_time,sys_file.linked as sys_file_linked,
+        sys_file.linked_table as sys_file_linked_table,sys_file.linked_table_id as sys_file_linked_table_id,sys_file.is_deleted as sys_file_is_deleted,
+        sys_file.manage_type as sys_file_manage_type,sys_file.file_type as sys_file_file_type,sys_file.update_user as sys_file_update_user
+    </sql>
+
+    <update id="updateBatchByCondition">
+        update
+        <include refid="Base_Table_Name"/>
+        <set>
+            <if test="bean.path != null">
+                ,path = #{bean.path,jdbcType=VARCHAR}
+            </if>
+            <if test="bean.uploadTime != null">
+                ,upload_time = #{bean.uploadTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="bean.uploadUser != null">
+                ,upload_user = #{bean.uploadUser,jdbcType=BIGINT}
+            </if>
+            <if test="bean.updateTime != null">
+                ,update_time = #{bean.updateTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="bean.linked != null">
+                ,linked = #{bean.linked,jdbcType=SMALLINT}
+            </if>
+            <if test="bean.linkedTable != null">
+                ,linked_table = #{bean.linkedTable,jdbcType=VARCHAR}
+            </if>
+            <if test="bean.linkedTableId != null">
+                ,linked_table_id = #{bean.linkedTableId,jdbcType=BIGINT}
+            </if>
+            <if test="bean.isDeleted != null">
+                ,is_deleted = #{bean.isDeleted,jdbcType=SMALLINT}
+            </if>
+            <if test="bean.manageType != null">
+                ,manage_type = #{bean.manageType,jdbcType=VARCHAR}
+            </if>
+            <if test="bean.fileType != null">
+                ,file_type = #{bean.fileType,jdbcType=VARCHAR}
+            </if>
+            <if test="bean.updateUser != null">
+                ,update_user = #{bean.updateUser,jdbcType=BIGINT}
+            </if>
+        </set>
+        <where>
+            <!--主键-->
+            <if test="params.id != null">
+                and sys_file.id = #{params.id}
+            </if>
+            <!--当前表的查询条件-->
+            <if test="params.sysFileQueryDTO != null">
+                <include refid="DTO_Condition"/>
+            </if>
+            <!--TODO 继续添加查询条件-->
+        </where>
+    </update>
+
+    <!--查询总数-->
+    <select id="total" resultType="java.lang.Long">
+        select count(1) from (
+        <include refid="Base_Query"/>
+        ) temp
+    </select>
+
+    <!--查询分页-->
+    <select id="page" resultMap="BasePageResultMap">
+        select t.*
+        from (
+        <include refid="Base_Page_Query"/>
+        ) t
+        <if test="page != null and page.sort != null">
+            order by
+            <foreach collection="page.sort" item="item" separator=",">t.sys_file_${item}</foreach>
+        </if>
+    </select>
+
+    <!--查询详情-->
+    <select id="detail" resultMap="BasePageResultMap">
+        select t.*
+        from (
+        <include refid="Base_Query"/>
+        ) t
+    </select>
+
+    <!--基础查询-->
+    <sql id="Base_Query">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="Base_Table_Name"/>
+        <include refid="Base_Condition"/>
+    </sql>
+
+    <!--对象参数查询条件-->
+    <sql id="DTO_Condition">
+        <!--主键-->
+        <if test="params.sysFileQueryDTO.id != null">
+            and sys_file.id = #{params.sysFileQueryDTO.id}
+        </if>
+        <!--文件名（路径）-->
+        <if test="params.sysFileQueryDTO.path != null and params.sysFileQueryDTO.path != ''">
+            and sys_file.path = #{params.sysFileQueryDTO.path}
+        </if>
+        <!--上传时间-->
+        <if test="params.sysFileQueryDTO.uploadTime_ge != null">
+            and sys_file.upload_time &gt;= #{params.sysFileQueryDTO.uploadTime_ge}
+        </if>
+        <if test="params.sysFileQueryDTO.uploadTime_le != null">
+            and sys_file.upload_time &lt;= #{params.sysFileQueryDTO.uploadTime_le}
+        </if>
+        <!--上传人-->
+        <if test="params.sysFileQueryDTO.uploadUser != null">
+            and sys_file.upload_user = #{params.sysFileQueryDTO.uploadUser}
+        </if>
+        <!--更新时间-->
+        <if test="params.sysFileQueryDTO.updateTime_ge != null">
+            and sys_file.update_time &gt;= #{params.sysFileQueryDTO.updateTime_ge}
+        </if>
+        <if test="params.sysFileQueryDTO.updateTime_le != null">
+            and sys_file.update_time &lt;= #{params.sysFileQueryDTO.updateTime_le}
+        </if>
+        <!--是否在使用中-->
+        <if test="params.sysFileQueryDTO.linked != null">
+            and sys_file.linked = #{params.sysFileQueryDTO.linked}
+        </if>
+        <!--关联的表-->
+        <if test="params.sysFileQueryDTO.linkedTable != null and params.sysFileQueryDTO.linkedTable != ''">
+            and sys_file.linked_table = #{params.sysFileQueryDTO.linkedTable}
+        </if>
+        <!--关联的表的 id-->
+        <if test="params.sysFileQueryDTO.linkedTableId != null">
+            and sys_file.linked_table_id = #{params.sysFileQueryDTO.linkedTableId}
+        </if>
+        <!--是否已删除-->
+        <if test="params.sysFileQueryDTO.isDeleted != null">
+            and sys_file.is_deleted = #{params.sysFileQueryDTO.isDeleted}
+        </if>
+        <!--文件管理服务器类型（local,oss,fdfs,minio）-->
+        <if test="params.sysFileQueryDTO.manageType != null and params.sysFileQueryDTO.manageType != ''">
+            and sys_file.manage_type = #{params.sysFileQueryDTO.manageType}
+        </if>
+        <!--文件类型-->
+        <if test="params.sysFileQueryDTO.fileType != null and params.sysFileQueryDTO.fileType != ''">
+            and sys_file.file_type = #{params.sysFileQueryDTO.fileType}
+        </if>
+        <!--更新人-->
+        <if test="params.sysFileQueryDTO.updateUser != null">
+            and sys_file.update_user = #{params.sysFileQueryDTO.updateUser}
+        </if>
+    </sql>
+
+    <!--基础条件-->
+    <sql id="Base_Condition">
+        <where>
+            <!--主键-->
+            <if test="params.id != null">
+                and sys_file.id = #{params.id}
+            </if>
+            <!--当前表的查询条件-->
+            <if test="params.sysFileQueryDTO != null">
+                <include refid="DTO_Condition"/>
+            </if>
+            <!--TODO 继续添加查询条件-->
+        </where>
+    </sql>
+
+    <sql id="Base_Page_Order_By">
+        <if test="page != null and page.sort != null">
+            order by
+            <foreach collection="page.sort" item="item" separator=",">sys_file.${item}</foreach>
+        </if>
+    </sql>
+
+    <!--分布查询-->
+    <sql id="Base_Page_Query">
+        <if test="page != null">
+            <choose>
+                <when test="page.offset != null and page.pageSize != null">
+
+                    <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
+                        <include refid="Base_Query"/>
+                        <include refid="Base_Page_Order_By"/>
+                        limit #{page.pageSize} offset #{page.offset}
+                    </if>
+
+                    <if test="_db_type_db_ == 'oracle'">
+                        SELECT offset_start.* FROM (
+                        SELECT rownum rn,offset_end.* FROM (
+
+                        <include refid="Base_Query"/>
+                        <include refid="Base_Page_Order_By"/>
+
+                        ) offset_end WHERE rownum <![CDATA[<=]]> (#{page.offset}+#{page.pageSize})
+                        ) offset_start WHERE offset_start.rn <![CDATA[>]]> #{page.offset}
+                    </if>
+
+                </when>
+                <otherwise>
+                    <include refid="Base_Query"/>
+                    <include refid="Base_Page_Order_By"/>
+                </otherwise>
+            </choose>
+        </if>
+    </sql>
+
+</mapper>

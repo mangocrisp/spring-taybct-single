@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.api.system.mapper.SysOauth2ClientMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.api.system.domain.SysOauth2Client">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        <result property="clientId" column="client_id" jdbcType="VARCHAR"/>
+        <result property="clientSecret" column="client_secret" jdbcType="VARCHAR"/>
+        <result property="resourceIds" column="resource_ids" jdbcType="VARCHAR"/>
+        <result property="scope" column="scope" jdbcType="VARCHAR"/>
+        <result property="authorizedGrantTypes" column="authorized_grant_types" jdbcType="VARCHAR"/>
+        <result property="webServerRedirectUri" column="web_server_redirect_uri" jdbcType="VARCHAR"/>
+        <result property="authorities" column="authorities" jdbcType="VARCHAR"/>
+        <result property="accessTokenValidity" column="access_token_validity" jdbcType="INTEGER"/>
+        <result property="refreshTokenValidity" column="refresh_token_validity" jdbcType="INTEGER"/>
+        <result property="additionalInformation" column="additional_information" jdbcType="VARCHAR"/>
+        <result property="autoApprove" column="auto_approve" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,create_user,create_time,
+        update_user,update_time,is_deleted,
+        client_id,client_secret,resource_ids,
+        scope,authorized_grant_types,web_server_redirect_uri,
+        authorities,access_token_validity,refresh_token_validity,
+        additional_information,auto_approve
+    </sql>
+</mapper>

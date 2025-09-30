@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.module.lf.mapper.ProcessMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.module.lf.domain.Process">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="SMALLINT"/>
+        <result property="designId" column="design_id" jdbcType="BIGINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="deptId" column="dept_id" jdbcType="BIGINT"/>
+        <result property="postId" column="post_id" jdbcType="BIGINT"/>
+        <result property="data" column="data" jdbcType="OTHER"/>
+        <result property="releaseId" column="release_id" jdbcType="BIGINT"/>
+        <result property="formData" column="form_data" jdbcType="OTHER"/>
+        <result property="status" column="status" jdbcType="SMALLINT"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="cause" column="cause" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="icon" column="type" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,create_user,create_time,
+        update_user,update_time,is_deleted,
+        design_id,title,user_id,
+        dept_id,post_id,data,
+        release_id,form_data,status,
+        remark,cause,type,icon
+    </sql>
+
+    <resultMap id="ProcessListVOMap" type="io.github.mangocrisp.spring.taybct.module.lf.vo.ProcessListVO">
+        <id property="processId" column="process_id" jdbcType="BIGINT"/>
+        <result property="releaseId" column="release_id" jdbcType="BIGINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+        <result property="createUserName" column="create_user_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="designId" column="design_id" jdbcType="BIGINT"/>
+        <result property="designName" column="design_name" jdbcType="VARCHAR"/>
+        <result property="nodeId" column="node_id" jdbcType="VARCHAR"/>
+        <result property="nodeText" column="node_text" jdbcType="VARCHAR"/>
+        <result property="icon" column="process_icon" jdbcType="VARCHAR"/>
+        <result property="lastVersion" column="design_last_version" jdbcType="BIGINT"/>
+        <result property="processStatus" column="process_status" jdbcType="BIGINT"/>
+        <result property="type" column="process_type" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <insert id="newProcess">
+        insert into lf_process
+        (
+        <include refid="Base_Column_List"/>
+        )
+        select
+        #{process.id}
+        , #{process.createUser}
+        , #{process.createTime}
+        , #{process.updateUser}
+        , #{process.updateTime}
+        , #{process.isDeleted}
+        , #{process.designId}
+        , #{process.title}
+        , #{process.userId}
+        , #{process.deptId}
+        , #{process.postId}
+        , data
+        , #{process.releaseId}
+        , #{process.formData}
+        , #{process.status}
+        , #{process.remark}
+        , #{process.cause}
+        , type
+        , icon
+        from lf_release where id = #{process.releaseId}
+    </insert>
+
+
+    <sql id="userRequestListQuery">
+        select
+        lp.id process_id,
+        lp.release_id release_id,
+        lp.design_id design_id,
+        ld.name design_name,
+        lp.title title,
+        lp.create_user create_user,
+        su.nickname create_user_name,
+        lp.create_time create_time,
+        lpp.node_id node_id,
+        ln.text node_text,
+        lp.icon process_icon,
+        ld.last_version design_last_version,
+        lp.status process_status,
+        lp.type process_type,
+        ${params.isMe} isme
+        from lf_process lp
+        left join sys_user su on lp.create_user = su.id
+        left join lf_design ld on lp.design_id = ld.id
+        left join lf_present_process lpp on lp.id = lpp.process_id
+        left join lf_nodes ln on lpp.node_id = ln.id
+        <where>
+            <if test="params.isMe != null and params.isMe and _login_user_ != null">
+                and lp.user_id =
+                <choose>
+                    <when test="_db_type_db_ == 'postgresql'">CAST(#{_login_user_.uid} AS BIGINT)</when>
+                    <otherwise>#{_login_user_.uid}</otherwise>
+                </choose>
+            </if>
+            <if test="params.designId != null">
+                and lp.design_id = #{params.designId}
+            </if>
+            <if test="params.title != null">
+                <choose>
+                    <when test="_db_type_db_ == 'sqlite'">
+                        and ld.name like '%' || #{params.title} || '%'
+                    </when>
+                    <otherwise>
+                        and ld.name like concat(concat('%',#{params.title}),'%')
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="params.releaseId != null">
+                and lp.release_id = #{params.releaseId}
+            </if>
+            <if test="params.type != null">
+                and lp.type = #{params.type}
+            </if>
+            <if test="params.processStatus != null">
+                and lp.status = #{params.processStatus}
+            </if>
+        </where>
+    </sql>
+
+    <select id="userRequestListCount" resultType="java.lang.Long">
+        select count(1) from (
+        <include refid="userRequestListQuery"/>
+        ) temp
+    </select>
+    <select id="userRequestList" resultMap="ProcessListVOMap">
+        <choose>
+            <when test="offset != null and size != null">
+
+                <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
+                    <include refid="userRequestListQuery"/>
+                    <!--<if test="pageOrder != null">
+                        order by lp.update_time desc
+                    </if>-->
+                    order by lp.update_time desc
+                    limit #{size} offset #{offset}
+                </if>
+
+                <if test="_db_type_db_ == 'oracle'">
+                    SELECT offset_start.* FROM (
+                    SELECT rownum rn,offset_end.* FROM (
+
+                    <include refid="userRequestListQuery"/>
+                    <!--<if test="pageOrder != null">
+                        order by lp.update_time desc
+                    </if>-->
+                    order by lp.update_time desc
+                    ) offset_end WHERE rownum <![CDATA[<=]]> (#{offset}+#{size})
+                    ) offset_start WHERE offset_start.rn <![CDATA[>]]> #{offset}
+                </if>
+            </when>
+            <otherwise>
+                <include refid="userRequestListQuery"/>
+                <!--<if test="pageOrder != null">
+                    order by lp.update_time desc
+                </if>-->
+                order by lp.update_time desc
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

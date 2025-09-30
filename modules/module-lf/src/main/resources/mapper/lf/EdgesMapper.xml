@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.module.lf.mapper.EdgesMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.module.lf.domain.Edges">
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="sourceNodeId" column="source_node_id" jdbcType="VARCHAR"/>
+        <result property="targetNodeId" column="target_node_id" jdbcType="VARCHAR"/>
+        <result property="properties" column="properties" jdbcType="OTHER"/>
+        <result property="text" column="text" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="processId" column="process_id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,source_node_id,target_node_id,
+        properties,text,type,
+        process_id
+    </sql>
+
+    <insert id="insertSelective" parameterType="io.github.mangocrisp.spring.taybct.module.lf.domain.Edges">
+        insert into lf_edges
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="sourceNodeId != null">source_node_id,</if>
+            <if test="targetNodeId != null">target_node_id,</if>
+            <if test="properties != null">properties,</if>
+            <if test="text != null">text,</if>
+            <if test="type != null">type,</if>
+            <if test="processId != null">process_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=VARCHAR},</if>
+            <if test="sourceNodeId != null">#{sourceNodeId,jdbcType=VARCHAR},</if>
+            <if test="targetNodeId != null">#{targetNodeId,jdbcType=VARCHAR},</if>
+            <if test="properties != null">#{properties,jdbcType=OTHER},</if>
+            <if test="text != null">#{text,jdbcType=VARCHAR},</if>
+            <if test="type != null">#{type,jdbcType=VARCHAR},</if>
+            <if test="processId != null">#{processId,jdbcType=BIGINT},</if>
+        </trim>
+    </insert>
+
+</mapper>

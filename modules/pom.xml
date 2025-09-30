@@ -18,6 +18,7 @@
         <module>module-system</module>
         <module>module-scheduling</module>
         <module>module-lf</module>
+        <module>module-online-doc</module>
     </modules>
 
     <properties>

@@ -21,9 +21,20 @@
 
     <dependencies>
 
+        <!--基础模块-->
         <dependency>
             <groupId>io.github.mangocrisp</groupId>
-            <artifactId>spring-taybct-common</artifactId>
+            <artifactId>spring-taybct-tool-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!--rabbit-mq-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <version>${spring-boot.version}</version>
+            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

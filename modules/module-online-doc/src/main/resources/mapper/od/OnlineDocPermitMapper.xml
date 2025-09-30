@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.module.od.mapper.OnlineDocPermitMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.module.od.domain.OnlineDocPermit">
+        <id property="id" column="t_online_doc_permit_id" jdbcType="BIGINT"/>
+        <result property="docId" column="t_online_doc_permit_doc_id" jdbcType="BIGINT"/>
+        <result property="deptId" column="t_online_doc_permit_dept_id" jdbcType="BIGINT"/>
+        <result property="userId" column="t_online_doc_permit_user_id" jdbcType="BIGINT"/>
+        <result property="permissions" column="t_online_doc_permit_permissions" jdbcType="OTHER"/>
+        <result property="isAdmin" column="t_online_doc_permit_is_admin" jdbcType="SMALLINT"/>
+    </resultMap>
+
+    <!--表名-->
+    <sql id="Base_Table_Name">t_online_doc_permit</sql>
+
+    <!--列名-->
+    <sql id="Base_Column_List">
+        t_online_doc_permit
+        .
+        id
+        as t_online_doc_permit_id
+      ,t_online_doc_permit.doc_id as t_online_doc_permit_doc_id
+      ,t_online_doc_permit.dept_id as t_online_doc_permit_dept_id
+      ,t_online_doc_permit.user_id as t_online_doc_permit_user_id
+      ,t_online_doc_permit.permissions as t_online_doc_permit_permissions
+      ,t_online_doc_permit.is_admin as t_online_doc_permit_is_admin
+    </sql>
+
+</mapper>

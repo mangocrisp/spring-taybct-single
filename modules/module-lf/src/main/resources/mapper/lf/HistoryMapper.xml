@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.module.lf.mapper.HistoryMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.module.lf.domain.History">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="time" column="time" jdbcType="TIMESTAMP"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="deptId" column="dept_id" jdbcType="BIGINT"/>
+        <result property="processId" column="process_id" jdbcType="BIGINT"/>
+        <result property="action" column="action" jdbcType="VARCHAR"/>
+        <result property="sort" column="sort" jdbcType="BIGINT"/>
+        <result property="data" column="data" jdbcType="OTHER"/>
+        <result property="nodeId" column="node_id" jdbcType="VARCHAR"/>
+        <result property="postId" column="post_id" jdbcType="BIGINT"/>
+        <result property="nodeType" column="node_type" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,time,user_id,
+        dept_id,process_id,action,
+        sort,data,node_id,
+        post_id,node_type
+    </sql>
+
+    <resultMap id="HistoryListVOMap" type="io.github.mangocrisp.spring.taybct.module.lf.vo.HistoryListVO"
+               extends="BaseResultMap">
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="deptName" column="dept_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="historyList" resultMap="HistoryListVOMap">
+        select lh.id
+        , lh.time
+        , lh.user_id
+        , lh.dept_id
+        , lh.process_id
+        , lh.action
+        , lh.sort
+        , lh.data
+        , lh.node_id
+        , lh.post_id
+        , lh.node_type
+        , su.nickname user_name
+        , su.avatar avatar
+        , sd.name dept_name
+        from lf_history lh
+        left join sys_user su on lh.user_id = su.id
+        left join sys_dept sd on lh.dept_id = sd.id
+        <where>
+            <if test="params.processId != null">
+                and lh.process_id = #{params.processId}
+            </if>
+            <if test="params.nodeType != null">
+                and lh.node_type in
+                <foreach collection="params.nodeType" item="type" open="(" separator="," close=")" index="index">
+                    #{type}
+                </foreach>
+            </if>
+            <if test="params.relatedToMe != null and params.relatedToMe == 1 and _login_user_ != null">
+                and lh.user_id =
+                <choose>
+                    <when test="_db_type_db_ == 'postgresql'">CAST(#{_login_user_.uid} AS BIGINT)</when>
+                    <otherwise>#{_login_user_.uid}</otherwise>
+                </choose>
+            </if>
+        </where>
+        order by lh.sort
+    </select>
+
+</mapper>

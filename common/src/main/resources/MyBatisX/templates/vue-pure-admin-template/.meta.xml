@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<templates>
+    <template>
+        <!-- 注意: 实体类无论如何都会生成 -->
+        <!-- 1.5.x 开始 configName=domain的配置会被特殊处理, 其他配置跟随实体的配置-->
+        <!-- 主要用于生成 request,response 类型的对象 -->
+        <property name="configName" value="domain"/>
+        <property name="configFile" value="domain.ftl"/>
+        <property name="fileName" value="${domain.fileName}"/>
+        <property name="suffix" value=".java"/>
+        <property name="packageName" value="${domain.basePackage}.domain"/>
+        <property name="encoding" value="${domain.encoding}"/>
+        <property name="basePath" value="${domain.basePath}"/>
+    </template>
+    <!--类型定义-->
+    <template>
+        <property name="configName" value="types"/>
+        <property name="configFile" value="types.d.ftl"/>
+        <property name="fileName" value="${domain.fileName?uncap_first}-types"/>
+        <property name="suffix" value=".d.ts"/>
+        <property name="packageName" value="${domain.basePackage}.types"/>
+        <property name="encoding" value="${domain.encoding}"/>
+        <property name="basePath" value="${domain.basePath}"/>
+    </template>
+    <!--后端请求接口-->
+    <template>
+        <property name="configName" value="api"/>
+        <property name="configFile" value="api.ftl"/>
+        <property name="fileName" value="${domain.fileName?uncap_first}"/>
+        <property name="suffix" value=".ts"/>
+        <property name="packageName" value="${domain.basePackage}.api.${domain.fileName?uncap_first}"/>
+        <property name="encoding" value="${domain.encoding}"/>
+        <property name="basePath" value="${domain.basePath}"/>
+    </template>
+    <!--编辑表单页面-->
+    <template>
+        <property name="configName" value="form"/>
+        <property name="configFile" value="form.ftl"/>
+        <property name="fileName" value="form"/>
+        <property name="suffix" value=".vue"/>
+        <property name="packageName" value="${domain.basePackage}.views.${domain.fileName?uncap_first}"/>
+        <property name="encoding" value="${domain.encoding}"/>
+        <property name="basePath" value="${domain.basePath}"/>
+    </template>
+    <!--分页列表页面-->
+    <template>
+        <property name="configName" value="index"/>
+        <property name="configFile" value="index.ftl"/>
+        <property name="fileName" value="index"/>
+        <property name="suffix" value=".vue"/>
+        <property name="packageName" value="${domain.basePackage}.views.${domain.fileName?uncap_first}"/>
+        <property name="encoding" value="${domain.encoding}"/>
+        <property name="basePath" value="${domain.basePath}"/>
+    </template>
+    <!--tsx 脚本文件-->
+    <template>
+        <property name="configName" value="hook"/>
+        <property name="configFile" value="hook.ftl"/>
+        <property name="fileName" value="hook"/>
+        <property name="suffix" value=".tsx"/>
+        <property name="packageName" value="${domain.basePackage}.views.${domain.fileName?uncap_first}.utils"/>
+        <property name="encoding" value="${domain.encoding}"/>
+        <property name="basePath" value="${domain.basePath}"/>
+    </template>
+    <!--表单规则-->
+    <template>
+        <property name="configName" value="rule"/>
+        <property name="configFile" value="rule.ftl"/>
+        <property name="fileName" value="rule"/>
+        <property name="suffix" value=".ts"/>
+        <property name="packageName" value="${domain.basePackage}.views.${domain.fileName?uncap_first}.utils"/>
+        <property name="encoding" value="${domain.encoding}"/>
+        <property name="basePath" value="${domain.basePath}"/>
+    </template>
+    <!--类型定义-->
+    <template>
+        <property name="configName" value="types"/>
+        <property name="configFile" value="types.ftl"/>
+        <property name="fileName" value="types"/>
+        <property name="suffix" value=".ts"/>
+        <property name="packageName" value="${domain.basePackage}.views.${domain.fileName?uncap_first}.utils"/>
+        <property name="encoding" value="${domain.encoding}"/>
+        <property name="basePath" value="${domain.basePath}"/>
+    </template>
+</templates>

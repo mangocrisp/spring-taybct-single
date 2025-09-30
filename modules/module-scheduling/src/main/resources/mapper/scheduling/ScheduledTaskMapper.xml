@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.module.scheduling.mapper.ScheduledTaskMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.module.scheduling.domain.ScheduledTask">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        <result property="taskKey" column="task_key" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="cron" column="cron" jdbcType="VARCHAR"/>
+        <result property="autoStart" column="auto_start" jdbcType="TINYINT"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+        <result property="params" column="params" jdbcType="VARCHAR"/>
+        <result property="tenantId" column="tenant_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,create_user,create_time,
+        update_user,update_time,is_deleted,
+        tenant_id,task_key,
+        description,cron,auto_start,
+        sort,params
+    </sql>
+
+    <select id="getAllNeedStartTask" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from scheduled_task
+        <where>
+            auto_start = 1
+        </where>
+    </select>
+
+</mapper>

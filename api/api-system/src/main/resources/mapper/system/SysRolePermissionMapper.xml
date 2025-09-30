@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.api.system.mapper.SysRolePermissionMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.api.system.domain.SysRolePermission">
+        <result property="roleId" column="role_id" jdbcType="BIGINT"/>
+        <result property="permissionId" column="permission_id" jdbcType="BIGINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        role_id
+        ,permission_id
+    </sql>
+
+    <delete id="clearDirtyData">
+        delete
+        FROM
+        sys_role_permission as temp
+        WHERE
+        not EXISTS ( SELECT 1 FROM sys_permission WHERE id = temp.permission_id
+        <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
+            limit 1
+        </if>
+        <if test="_db_type_db_ == 'oracle'">
+            and ROWNUM <![CDATA[<]]> 2
+        </if>
+        )
+        or not EXISTS (select 1 from sys_role where id = temp.role_id
+        <if test="_db_type_db_ == 'mysql' or _db_type_db_ == 'sqlite' or _db_type_db_ == 'postgresql'">
+            limit 1
+        </if>
+        <if test="_db_type_db_ == 'oracle'">
+            and ROWNUM <![CDATA[<]]> 2
+        </if>
+        )
+    </delete>
+    <delete id="removeByLoginRoleCode">
+        delete from sys_role_permission srp
+        where srp.role_id = #{roleId}
+        and (permission_id in (
+        select
+        a.permission_id
+        from
+        (
+        select permission_id from sys_role_permission srp2
+        left join sys_role sr on srp2.role_id = sr.id and sr.status = 1 and sr.is_deleted = 0
+        where sr.code in
+        <foreach collection="authorities" item="code" open="(" separator="," close=")" index="index">
+            #{code}
+        </foreach>
+        ) a
+        ) or permission_id in
+        <foreach collection="permissionIdSet" item="permissionId" open="(" separator="," close=")" index="index">
+            #{permissionId}
+        </foreach>
+        )
+    </delete>
+
+</mapper>

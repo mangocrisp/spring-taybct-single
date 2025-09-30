@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.module.lf.mapper.ReleaseMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.module.lf.domain.Release">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="SMALLINT"/>
+        <result property="designId" column="design_id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="SMALLINT"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="data" column="data" jdbcType="OTHER"/>
+        <result property="version" column="version" jdbcType="BIGINT"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,create_user,create_time,
+        update_user,update_time,is_deleted,
+        design_id,name,status,
+        description,data,version,
+        type,icon
+    </sql>
+
+    <insert id="publish">
+        insert into lf_release
+        (
+        <include refid="Base_Column_List"/>
+        )
+        <foreach collection="dto" separator="union all" item="release">
+            select
+            #{release.id}
+            , #{release.createUser}
+            , #{release.createTime}
+            , #{release.updateUser}
+            , #{release.updateTime}
+            , #{release.isDeleted}
+            , #{release.designId}
+            , #{release.name}
+            , #{release.status}
+            , #{release.description}
+            , data
+            , #{release.version}
+            , type
+            , icon
+            from lf_design where id = #{release.designId}
+        </foreach>
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from lf_release
+        where id = #{id,jdbcType=BIGINT}
+        <!--<if test="_login_user_ != null">
+            and exists(select 1 from lf_release_permissions lrp where lrp.release_id = lf_release.id
+            and (
+            <choose>
+                <when test="_db_type_db_ == 'postgresql'">
+                    user_id = CAST(#{_login_user_.uid} AS BIGINT)
+                </when>
+                <otherwise>
+                    user_id = #{_login_user_.uid}
+                </otherwise>
+            </choose>
+            or user_id is null))
+        </if>-->
+    </select>
+
+    <select id="page" resultMap="BaseResultMap">
+        select lf_release.id
+        ,lf_release.create_user
+        ,lf_release.create_time
+        ,lf_release.update_user
+        ,lf_release.update_time
+        ,lf_release.is_deleted
+        ,lf_release.design_id
+        ,lf_release.name
+        ,lf_design.status as status
+        ,lf_release.description
+        <!--,lf_release.data 数据太多了列表查询的时候就不要查询了，应该是点查看详情的时候用 id 一个一个的去查询-->
+        ,lf_release.version
+        ,lf_release.type
+        ,lf_release.icon
+        from lf_release
+        left join lf_design on lf_design.id = lf_release.design_id
+        <where>
+            <!--<if test="_parameter.containsKey('_data_scope_') and _data_scope_ != null">
+                and exists(${_data_scope_})
+            </if>-->
+            <!--<if test="_login_user_ != null">
+                and exists(select 1 from lf_release_permissions lrp where lrp.release_id = lf_release.id
+                and (
+                <choose>
+                    <when test="_db_type_db_ == 'postgresql'">
+                        user_id = CAST(#{_login_user_.uid} AS BIGINT)
+                    </when>
+                    <otherwise>
+                        user_id = #{_login_user_.uid}
+                    </otherwise>
+                </choose>
+                or user_id is null))
+            </if>-->
+            <if test="dto.id != null">
+                and lf_release.id = #{dto.id}
+            </if>
+            <!--创建时间-->
+            <if test="dto.createTimeBegin != null">
+                and lf_release.create_time &gt;= #{dto.createTimeBegin}
+            </if>
+            <if test="dto.createTimeEnd != null">
+                and lf_release.create_time &lt;= #{dto.createTimeEnd}
+            </if>
+            <if test="dto.designId != null">
+                and lf_release.design_id = #{dto.designId}
+            </if>
+            <if test="dto.name != null and dto.name != ''">
+                <choose>
+                    <when test="_db_type_db_ == 'sqlite'">
+                        and lf_release.name like '%' || #{dto.name} || '%'
+                    </when>
+                    <otherwise>
+                        and lf_release.name like concat(concat('%',#{dto.name}),'%')
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="dto.status != null">
+                and lf_design.status = #{dto.status}
+            </if>
+            <if test="dto.type != null and dto.type != ''">
+                and lf_release.type = #{dto.type}
+            </if>
+            <if test="dto.description != null and dto.description != ''">
+                <choose>
+                    <when test="_db_type_db_ == 'sqlite'">
+                        and lf_release.description like '%' || #{dto.description} || '%'
+                    </when>
+                    <otherwise>
+                        and lf_release.description like concat(concat('%',#{dto.description}),'%')
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="dto.version != null">
+                and lf_release.version = #{dto.version}
+            </if>
+            <if test="dto.showNewVersion">
+                and lf_release.version = lf_design.last_version
+            </if>
+        </where>
+    </select>
+
+</mapper>

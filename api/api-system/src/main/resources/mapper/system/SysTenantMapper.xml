@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.api.system.mapper.SysTenantMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.api.system.domain.SysTenant">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="tenantId" column="tenant_id" jdbcType="VARCHAR"/>
+        <result property="tenantName" column="tenant_name" jdbcType="VARCHAR"/>
+        <result property="tenantManager" column="tenant_manager" jdbcType="VARCHAR"/>
+        <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="sort" column="sort" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        t
+        .
+        id
+        ,t.tenant_id,t.tenant_name,
+        t.tenant_manager,t.create_user,t.create_time,
+        t.update_user,t.update_time,t.is_deleted,t.icon,t.remark,t.status,t.sort
+    </sql>
+
+    <select id="listUserTenant" resultType="io.github.mangocrisp.spring.taybct.api.system.domain.SysTenant">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_tenant t left join sys_user_tenant u on t.tenant_id = u.tenant_id
+        <where>
+            t.is_deleted = 0
+            <!--<if test="isRoot == 0">
+                and t.tenant_id <![CDATA[<>]]> #{defaultTenantId}
+            </if>-->
+            <if test="userId != null">
+                <choose>
+                    <when test="_db_type_db_ == 'postgresql'">
+                        and u.user_id = CAST(#{userId} AS BIGINT)
+                    </when>
+                    <otherwise>
+                        and u.user_id = #{userId}
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        order by t.sort asc
+    </select>
+
+</mapper>

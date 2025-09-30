@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.module.lf.mapper.DesignPermissionsMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.module.lf.domain.DesignPermissions">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="designId" column="design_id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="deptId" column="dept_id" jdbcType="BIGINT"/>
+        <result property="permEdit" column="perm_edit" jdbcType="SMALLINT"/>
+        <result property="permDelete" column="perm_delete" jdbcType="SMALLINT"/>
+        <result property="permPublish" column="perm_publish" jdbcType="SMALLINT"/>
+        <result property="permShare" column="perm_share" jdbcType="SMALLINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,design_id,user_id,
+        dept_id,perm_edit,
+        perm_delete,perm_publish,perm_share
+    </sql>
+</mapper>

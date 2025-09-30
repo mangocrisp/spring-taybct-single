@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.mangocrisp.spring.taybct.api.system.mapper.SysDeptMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.mangocrisp.spring.taybct.api.system.domain.SysDept">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="createUser" column="create_user" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="BIGINT"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="SMALLINT"/>
+        <result property="uniqueKey" column="unique_key" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="sort" column="sort" jdbcType="OTHER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="fullName" column="full_name" jdbcType="VARCHAR"/>
+        <result property="code" column="code" jdbcType="VARCHAR"/>
+        <result property="pid" column="pid" jdbcType="BIGINT"/>
+        <result property="pidAll" column="pid_all" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        sd
+        .
+        id
+        ,sd.create_user
+        ,sd.create_time
+        ,sd.update_user
+        ,sd.update_time
+        ,sd.name
+        ,sd.sort
+        ,sd.remark
+        ,sd.full_name
+        ,sd.code
+        ,sd.pid
+        ,sd.pid_all
+        ,sd.type
+    </sql>
+
+    <resultMap id="SysDeptTreeVOMap" type="io.github.mangocrisp.spring.taybct.api.system.vo.SysDeptTreeVO"
+               extends="BaseResultMap">
+    </resultMap>
+
+    <!--权限过滤条件-->
+    <sql id="Auth_Condition">
+        and(
+        <trim prefixOverrides="or">
+            <!-- 按用户过滤 -->
+            <if test="dto.filterByUser == 1">
+                EXISTS (
+                SELECT 1 FROM sys_user_dept sud
+                left join sys_dept sdi on sdi.is_deleted = 0 and sud.dept_id = sdi.id
+                where sud.user_id = #{operator}
+                and (
+                sud.dept_id = sd.id
+                <if test="_db_type_db_ == 'postgresql'">
+                    <if test="dto.includeChildren != null and dto.includeChildren == 1">
+                        or CAST(sud.dept_id as VARCHAR) = ANY(STRING_TO_ARRAY(sd.pid_all, ','))
+                    </if>
+                    <if test="dto.includeParents != null and dto.includeParents == 1">
+                        OR CAST(sd.id AS VARCHAR) = ANY(STRING_TO_ARRAY(sdi.pid_all, ',') )
+                    </if>
+                </if>
+                <if test="_db_type_db_ == 'mysql'">
+                    <if test="dto.includeChildren != null and dto.includeChildren == 1">
+                        or FIND_IN_SET(sud.dept_id,sd.pid_all)
+                    </if>
+                    <if test="dto.includeParents != null and dto.includeParents == 1">
+                        or FIND_IN_SET(sd.id,sdi.pid_all)
+                    </if>
+                </if>
+                <if test="_db_type_db_ == 'sqlite'">
+                    <if test="dto.includeChildren != null and dto.includeChildren == 1">
+                        or ',' || sd.pid_all || ',' like '%,' || sud.dept_id || ',%'
+                    </if>
+                    <if test="dto.includeParents != null and dto.includeParents == 1">
+                        or ',' || sd.pid_all || ',' like '%,' || sd.id || ',%'
+                    </if>
+                </if>
+                <if test="_db_type_db_ == 'oracle'">
+                    <if test="dto.includeChildren != null and dto.includeChildren == 1">
+                        or INSTR(sd.pid_all, TO_CHAR(sud.dept_id))>0
+                    </if>
+                    <if test="dto.includeParents != null and dto.includeParents == 1">
+                        or INSTR(sdi.pid_all, TO_CHAR(sd.id))>0
+                    </if>
+                </if>
+                )
+                )
+            </if>
+            <!-- 按角色过滤 -->
+            <if test="dto.filterByRole == 1">
+                or EXISTS(
+                select 1 from sys_role_dept srd
+                LEFT JOIN sys_dept sdi on sdi.is_deleted = 0 and srd.dept_id = sdi.ID
+                where exists (select 1 from sys_role sr where sr.code in
+                <foreach collection="authorities" item="code" open="(" separator="," close=")" index="index">
+                    #{code}
+                </foreach>
+                and srd.role_id = sr.id)
+                and (
+                srd.dept_id = sd.id
+                <if test="_db_type_db_ == 'postgresql'">
+                    <if test="dto.includeChildren != null and dto.includeChildren == 1">
+                        or CAST(srd.dept_id as VARCHAR) = ANY(STRING_TO_ARRAY(sd.pid_all, ','))
+                    </if>
+                    <if test="dto.includeParents != null and dto.includeParents == 1">
+                        OR CAST(sd.id AS VARCHAR) = ANY(STRING_TO_ARRAY(sdi.pid_all, ',') )
+                    </if>
+                </if>
+                <if test="_db_type_db_ == 'mysql'">
+                    <if test="dto.includeChildren != null and dto.includeChildren == 1">
+                        or FIND_IN_SET(srd.dept_id,sd.pid_all)
+                    </if>
+                    <if test="dto.includeParents != null and dto.includeParents == 1">
+                        or FIND_IN_SET(sd.id,sdi.pid_all)
+                    </if>
+                </if>
+                <if test="_db_type_db_ == 'sqlite'">
+                    <if test="dto.includeChildren != null and dto.includeChildren == 1">
+                        or ',' || sd.pid_all || ',' like '%,' || srd.dept_id || ',%'
+                    </if>
+                    <if test="dto.includeParents != null and dto.includeParents == 1">
+                        or ',' || sd.pid_all || ',' like '%,' || sd.id || ',%'
+                    </if>
+                </if>
+                <if test="_db_type_db_ == 'oracle'">
+                    <if test="dto.includeChildren != null and dto.includeChildren == 1">
+                        or INSTR(sd.pid_all, TO_CHAR(srd.dept_id))>0
+                    </if>
+                    <if test="dto.includeParents != null and dto.includeParents == 1">
+                        or INSTR(sdi.pid_all, TO_CHAR(sd.id))>0
+                    </if>
+                </if>
+                )
+                )
+            </if>
+        </trim>
+        )
+    </sql>
+
+    <select id="tree" resultMap="SysDeptTreeVOMap">
+        select
+        sd.id
+        ,sd.name
+        ,sd.sort
+        ,sd.remark
+        ,sd.full_name
+        ,sd.code
+        ,sd.pid
+        ,sd.pid_all
+        ,sd.type
+        from sys_dept sd
+        <where>
+            sd.is_deleted = 0
+            <if test="isRoot != 1 and authorities!=null and authorities.size!=0 and dto.filterByUser != null and dto.filterByRole != null">
+                <include refid="Auth_Condition"/>
+            </if>
+        </where>
+    </select>
+    <select id="deptFilterPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_dept sd
+        <where>
+            sd.is_deleted = 0
+            <if test="dto.pid != null">
+                -- 指定部门查询，要把当前部门，和当前部门下的所有子集都查询出来
+                and (sd.pid = #{dto.pid}
+                <if test="dto.includeChildren != null and dto.includeChildren == 1">
+                    <if test="_db_type_db_ == 'postgresql'">
+                        or CAST(#{dto.pid} as VARCHAR) = ANY(STRING_TO_ARRAY(sd.pid_all, ','))
+                    </if>
+                    <if test="_db_type_db_ == 'mysql'">
+                        or FIND_IN_SET(#{dto.pid},sd.pid_all)
+                    </if>
+                    <if test="_db_type_db_ == 'sqlite'">
+                        or ',' || sd.pid_all || ',' like '%,' || dto.pid || ',%'
+                    </if>
+                    <if test="_db_type_db_ == 'oracle'">
+                        or INSTR(sd.pid_all, TO_CHAR(#{dto.pid}))>0
+                    </if>
+                </if>
+                )
+            </if>
+            <if test="isRoot != 1 and authorities!=null and authorities.size!=0 and dto.filterByUser != null and dto.filterByRole != null">
+                <include refid="Auth_Condition"/>
+            </if>
+            <if test="dto.name != null">
+                <choose>
+                    <when test="_db_type_db_ == 'sqlite'">
+                        and sd.name like '%' || #{dto.name} || '%'
+                    </when>
+                    <otherwise>
+                        and sd.name like concat(concat('%',#{dto.name}),'%')
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="dto.code != null">
+                <choose>
+                    <when test="_db_type_db_ == 'sqlite'">
+                        and sd.code like '%' || #{dto.code}
+                    </when>
+                    <otherwise>
+                        and sd.code like concat('%',#{dto.code})
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="dto.type != null">
+                and sd.type = #{dto.type}
+            </if>
+        </where>
+        <if test="pageOrder != null">
+            order by ${pageOrder}
+        </if>
+    </select>
+
+    <select id="deptUserTree" resultType="io.github.mangocrisp.spring.taybct.api.system.vo.DeptUserTreeVO">
+        select d.* from (
+        select
+        'd_' || sys_dept.id as id,
+        sys_dept.name as name,
+        'dept' as type,
+        sys_dept.id as dept_id,
+        <choose>
+            <when test="_db_type_db_ == 'postgresql'">
+                null::int8 as user_id,
+            </when>
+            <otherwise>
+                null as user_id,
+            </otherwise>
+        </choose>
+        'd_' || sys_dept.pid as parent_id from sys_dept
+        where sys_dept.is_deleted = 0 and (sys_dept.id in
+        <foreach collection="deptIdSet" open="(" separator="," close=")" item="deptId">
+            #{deptId}
+        </foreach>
+        or sys_dept.pid in
+        <foreach collection="deptIdSet" open="(" separator="," close=")" item="deptId">
+            #{deptId}
+        </foreach>)
+        order by sys_dept.id,sys_dept.sort
+        ) d
+        <if test="includeUser">
+            union all
+            select u.* from (
+            select
+            'u_' || sys_user.id as id,
+            sys_user.nickname as name,
+            'user' as type,
+            sys_user_dept.dept_id,
+            sys_user.id as user_id,
+            'd_' || sys_user_dept.dept_id as parent_id from sys_user join sys_user_dept on sys_user.id =
+            sys_user_dept.user_id
+            where sys_user.status = 1 and sys_user.is_deleted = 0 and sys_user_dept.dept_id in
+            <foreach collection="deptIdSet" open="(" separator="," close=")" item="deptId">
+                #{deptId}
+            </foreach>
+            and sys_user.id <![CDATA[<>]]> 1
+            <if test="_login_user_ != null">
+                <choose>
+                    <when test="_db_type_db_ == 'postgresql'">
+                        and sys_user.id <![CDATA[<>]]> #{_login_user_.uid}::int8
+                    </when>
+                    <otherwise>
+                        and sys_user.id <![CDATA[<>]]> #{_login_user_.uid}
+                    </otherwise>
+                </choose>
+            </if>
+            order by sys_user.nickname
+            ) u
+        </if>
+    </select>
+    <select id="getDeptIdsByUserNickname" resultType="java.lang.Long">
+        select sys_user_dept.dept_id from sys_user join sys_user_dept on sys_user_dept.user_id = sys_user.id
+        <where>
+            <choose>
+                <when test="_db_type_db_ == 'sqlite'">
+                    sys_user.nickname like '%' || #{nickname} || '%'
+                </when>
+                <otherwise>
+                    sys_user.nickname like concat(concat('%', #{nickname}), '%')
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+</mapper>
