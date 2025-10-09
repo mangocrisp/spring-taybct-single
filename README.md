@@ -62,7 +62,7 @@ public class SysUserController extends SysUserControllerRegister {
 
 #### 参与贡献
 
-1.  本项目是基于 [Spring Taybct](https://github.com/mangocrisp/spring-taybct) 开发的单体架构业务项目，参与贡献就去这里面
+1.  本项目是基于 [Spring Taybct](https://gitee.com/mangocrisp/spring-taybct) 开发的单体架构业务项目，参与贡献就去这里面
 
 #### 免责声明
 
